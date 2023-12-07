@@ -14,6 +14,16 @@ const adapter = {
     otp: new MemoryOtpAdapter(),
 };
 
+const profiles: {
+    id: string;
+    name?: string;
+    picture?: string;
+}[] = [];
+
+export function getProfile(userId: string) {
+    return profiles.find((profile) => profile.id === userId);
+}
+
 export const guardbox: MiddlewareHandler<{
     Variables: {
         auth: Guardbox;
@@ -32,6 +42,13 @@ export const guardbox: MiddlewareHandler<{
             delete: (key, options) => {
                 deleteCookie(c, key, options);
             },
+        },
+        onUserCreate(user, account) {
+            profiles.push({
+                id: user.id,
+                name: account?.metadata?.name as string | undefined,
+                picture: account?.metadata?.picture as string | undefined,
+            });
         },
     });
     c.set('auth', auth);

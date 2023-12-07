@@ -1,19 +1,19 @@
 import { Hono } from 'hono';
 import { authApp } from './auth';
 import { Layout } from './layout';
-import { guardbox } from './guardbox';
+import { getProfile, guardbox } from './guardbox';
 
 const app = new Hono();
 
 app.get('/', guardbox, async (c) => {
     const session = await c.var.auth.getSession();
     if (session !== undefined) {
-        const user = await c.var.auth.getUserById(session.userId);
-        const name = user?.email?.split('@')[0];
+        const profile = getProfile(session.userId);
         return c.html(
             <Layout title="Guardbox example - Hono with Google Auth">
                 <h1>Guardbox example - Hono with Google Auth</h1>
-                <p>ようこそ、{name}さん。</p>
+                <img src={profile?.picture} />
+                <p>ようこそ、{profile?.name}さん。</p>
                 <form method="POST" action="/auth/logout">
                     <button type="submit">ログアウト</button>
                 </form>
