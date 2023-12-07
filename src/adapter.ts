@@ -1,13 +1,13 @@
 import type {
     AccountUpdateValue,
     AccountWithUserId,
-    UserCreateValue,
     Otp,
-    Session,
-    UserUpdateValue,
-    User,
-    SessionDuration,
     OtpOptions,
+    Session,
+    SessionDuration,
+    User,
+    UserCreateValue,
+    UserUpdateValue,
 } from './types';
 
 export abstract class GuardboxUserAdapter {
@@ -19,29 +19,29 @@ export abstract class GuardboxUserAdapter {
 
     public abstract updateUser(
         userId: string,
-        value: UserUpdateValue
+        value: UserUpdateValue,
     ): Promise<User>;
 
     public abstract deleteUser(userId: string): void;
 
     public abstract addAccount(
-        value: AccountWithUserId
+        value: AccountWithUserId,
     ): Promise<AccountWithUserId>;
 
     public abstract getAccountByUserId(
         provider: string,
-        userId: string
+        userId: string,
     ): Promise<AccountWithUserId | undefined>;
 
     public abstract getAccountByKey(
         provider: string,
-        key: string
+        key: string,
     ): Promise<AccountWithUserId | undefined>;
 
     public abstract updateAccount(
         userId: string,
         provider: string,
-        value: AccountUpdateValue
+        value: AccountUpdateValue,
     ): Promise<AccountWithUserId>;
 
     public abstract deleteAccount(userId: string, provider: string): void;
@@ -50,7 +50,7 @@ export abstract class GuardboxUserAdapter {
 export abstract class GuardboxSessionAdapter {
     public abstract createSession(
         userId: string,
-        duration: SessionDuration
+        duration: SessionDuration,
     ): Promise<Session>;
 
     public abstract getSession(sessionId: string): Promise<Session | undefined>;
@@ -63,7 +63,7 @@ export abstract class GuardboxSessionAdapter {
 export abstract class GuardboxOtpAdapter {
     public abstract createOtp(
         options: OtpOptions,
-        duration: number
+        duration: number,
     ): Promise<Otp>;
 
     public abstract getOtp(otpId: string): Promise<Otp | undefined>;

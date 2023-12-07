@@ -16,7 +16,7 @@ authApp.get('/google/callback', guardbox, async (c) => {
         const session = await googleAuth.createSessionByCode(
             c.var.auth,
             code,
-            state
+            state,
         );
         if (session !== undefined) {
             await c.var.auth.setSession(session);
@@ -37,6 +37,6 @@ authApp.get('/error', async (c) => {
             <h1>ログインに失敗しました</h1>
             <p>再度ログインしてください。</p>
             <a href="/">トップに戻る</a>
-        </Layout>
+        </Layout>,
     );
 });

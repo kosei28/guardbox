@@ -1,5 +1,5 @@
-import { file, Glob } from 'bun';
 import path from 'node:path';
+import { Glob, file } from 'bun';
 import { build } from 'esbuild';
 import type { Plugin, PluginBuild } from 'esbuild';
 
@@ -13,7 +13,7 @@ const addJsExtension: Plugin = {
                 if (await file(tsPath).exists()) {
                     importPath = `${args.path}.js`;
                 } else {
-                    tsPath = path.join(args.resolveDir, args.path, `index.ts`);
+                    tsPath = path.join(args.resolveDir, args.path, 'index.ts');
                     if (await file(tsPath).exists()) {
                         importPath = `${args.path}/index.js`;
                     }

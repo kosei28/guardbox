@@ -24,9 +24,9 @@ export class OAuth2Provider {
             redirectUrl: string;
             scope?: string;
             getProfile: (
-                tokens: OAuth2Tokens
+                tokens: OAuth2Tokens,
             ) => Promise<OAuth2Profile | undefined>;
-        }
+        },
     ) {}
 
     public stateCookieKey(appName: string): string {
@@ -53,10 +53,10 @@ export class OAuth2Provider {
     public async verifyCode(
         auth: Guardbox,
         code: string,
-        state: string
+        state: string,
     ): Promise<OAuth2Profile | undefined> {
         const savedState = await auth.getCookie(
-            this.stateCookieKey(auth.appName)
+            this.stateCookieKey(auth.appName),
         );
         await auth.deleteCookie(this.stateCookieKey(auth.appName));
         if (savedState !== state) {
@@ -92,7 +92,7 @@ export class OAuth2Provider {
     public async createSessionByCode(
         auth: Guardbox,
         code: string,
-        state: string
+        state: string,
     ) {
         const profile = await this.verifyCode(auth, code, state);
         if (profile === undefined) {
@@ -100,7 +100,7 @@ export class OAuth2Provider {
         }
         const account = await auth.getAccountByKey(
             this.options.provider,
-            profile.id
+            profile.id,
         );
         let user: User | undefined;
         if (account !== undefined) {
@@ -127,7 +127,7 @@ export class OAuth2Provider {
                         provider: this.options.provider,
                         key: profile.id,
                         metadata: profile.raw,
-                    }
+                    },
                 );
             }
         }

@@ -22,7 +22,7 @@ export class GoogleProvider extends OAuth2Provider {
                             headers: {
                                 Authorization: `Bearer ${tokens.access_token}`,
                             },
-                        }
+                        },
                     );
                     const raw = await res.json();
                     const profile = {

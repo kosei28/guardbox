@@ -4,15 +4,15 @@ import {
     GuardboxUserAdapter,
 } from '../adapter';
 import type {
-    AccountWithUserId,
-    UserCreateValue,
-    Session,
-    UserUpdateValue,
-    User,
     AccountUpdateValue,
-    SessionDuration,
+    AccountWithUserId,
     Otp,
     OtpOptions,
+    Session,
+    SessionDuration,
+    User,
+    UserCreateValue,
+    UserUpdateValue,
 } from '../types';
 
 export class MemoryUserAdapter extends GuardboxUserAdapter {
@@ -38,7 +38,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
 
     public async updateUser(
         userId: string,
-        value: UserUpdateValue
+        value: UserUpdateValue,
     ): Promise<User> {
         const user = await this.getUserById(userId);
         if (!user) {
@@ -58,7 +58,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     }
 
     public async addAccount(
-        value: AccountWithUserId
+        value: AccountWithUserId,
     ): Promise<AccountWithUserId> {
         const user = await this.getUserById(value.userId);
         if (!user) {
@@ -70,27 +70,27 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
 
     public async getAccountByUserId(
         provider: string,
-        userId: string
+        userId: string,
     ): Promise<AccountWithUserId | undefined> {
         return this.accounts.find(
             (account) =>
-                account.provider === provider && account.userId === userId
+                account.provider === provider && account.userId === userId,
         );
     }
 
     public async getAccountByKey(
         provider: string,
-        key: string
+        key: string,
     ): Promise<AccountWithUserId | undefined> {
         return this.accounts.find(
-            (account) => account.provider === provider && account.key === key
+            (account) => account.provider === provider && account.key === key,
         );
     }
 
     public async updateAccount(
         userId: string,
         provider: string,
-        value: AccountUpdateValue
+        value: AccountUpdateValue,
     ): Promise<AccountWithUserId> {
         const account = await this.getAccountByUserId(provider, userId);
         if (!account) {
@@ -108,7 +108,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     public deleteAccount(userId: string, provider: string): void {
         this.accounts = this.accounts.filter(
             (account) =>
-                account.userId !== userId || account.provider !== provider
+                account.userId !== userId || account.provider !== provider,
         );
     }
 }
@@ -118,14 +118,14 @@ export class MemorySessionAdapter extends GuardboxSessionAdapter {
 
     public async createSession(
         userId: string,
-        duration: SessionDuration
+        duration: SessionDuration,
     ): Promise<Session> {
         const session = {
             id: Math.random().toString(36).slice(2),
             userId,
             activeExpiresAt: new Date(Date.now() + duration.active),
             idleExpiresAt: new Date(
-                Date.now() + duration.active + duration.idle
+                Date.now() + duration.active + duration.idle,
             ),
         };
         this.sessions.push(session);
@@ -138,13 +138,13 @@ export class MemorySessionAdapter extends GuardboxSessionAdapter {
 
     public deleteSession(sessionId: string): void {
         this.sessions = this.sessions.filter(
-            (session) => session.id !== sessionId
+            (session) => session.id !== sessionId,
         );
     }
 
     public deleteUserSession(userId: string): void {
         this.sessions = this.sessions.filter(
-            (session) => session.userId !== userId
+            (session) => session.userId !== userId,
         );
     }
 }
@@ -154,7 +154,7 @@ export class MemoryOtpAdapter extends GuardboxOtpAdapter {
 
     public async createOtp(
         options: OtpOptions,
-        duration: number
+        duration: number,
     ): Promise<Otp> {
         const otp = {
             id: Math.random().toString(36).slice(2),
@@ -177,7 +177,7 @@ export class MemoryOtpAdapter extends GuardboxOtpAdapter {
         this.otps = this.otps.filter(
             (otp) =>
                 otp.userId !== userId ||
-                (type !== undefined ? otp.type !== type : false)
+                (type !== undefined ? otp.type !== type : false),
         );
     }
 }

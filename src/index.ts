@@ -1,16 +1,16 @@
 import type {
     Account,
+    AccountUpdateValue,
     AccountWithUserId,
-    UserCreateValue,
+    CookieOptions,
     GuardboxOptions,
     Otp,
-    Session,
-    UserUpdateValue,
-    User,
-    AccountUpdateValue,
-    SessionDuration,
     OtpOptions,
-    CookieOptions,
+    Session,
+    SessionDuration,
+    User,
+    UserCreateValue,
+    UserUpdateValue,
 } from './types';
 
 export class Guardbox {
@@ -43,7 +43,7 @@ export class Guardbox {
     public async setCookie(
         key: string,
         value: string,
-        options: CookieOptions = {}
+        options: CookieOptions = {},
     ) {
         await this.options.cookies.set(key, value, {
             path: '/',
@@ -68,7 +68,7 @@ export class Guardbox {
 
     public async createUser(
         value: UserCreateValue,
-        account?: Account
+        account?: Account,
     ): Promise<User> {
         const user = await this.options.adapter.user.createUser(value);
         let newAccount;
@@ -94,7 +94,7 @@ export class Guardbox {
 
     public async updateUser(
         userId: string,
-        value: UserUpdateValue
+        value: UserUpdateValue,
     ): Promise<User> {
         return await this.options.adapter.user.updateUser(userId, value);
     }
@@ -104,24 +104,24 @@ export class Guardbox {
     }
 
     public async addAccount(
-        value: AccountWithUserId
+        value: AccountWithUserId,
     ): Promise<AccountWithUserId> {
         return await this.options.adapter.user.addAccount(value);
     }
 
     public async getAccountByUserId(
         provider: string,
-        userId: string
+        userId: string,
     ): Promise<AccountWithUserId | undefined> {
         return await this.options.adapter.user.getAccountByUserId(
             provider,
-            userId
+            userId,
         );
     }
 
     public async getAccountByKey(
         provider: string,
-        key: string
+        key: string,
     ): Promise<AccountWithUserId | undefined> {
         return await this.options.adapter.user.getAccountByKey(provider, key);
     }
@@ -129,12 +129,12 @@ export class Guardbox {
     public async updateAccount(
         userId: string,
         provider: string,
-        value: AccountUpdateValue
+        value: AccountUpdateValue,
     ): Promise<AccountWithUserId> {
         return await this.options.adapter.user.updateAccount(
             userId,
             provider,
-            value
+            value,
         );
     }
 
@@ -147,9 +147,8 @@ export class Guardbox {
         if (sessionId === undefined) {
             return undefined;
         }
-        const session = await this.options.adapter.session.getSession(
-            sessionId
-        );
+        const session =
+            await this.options.adapter.session.getSession(sessionId);
         if (session === undefined) {
             await this.setSession(null);
             return undefined;
@@ -183,7 +182,7 @@ export class Guardbox {
     public async createSession(userId: string): Promise<Session> {
         return await this.options.adapter.session.createSession(
             userId,
-            this.sessionDuration
+            this.sessionDuration,
         );
     }
 
@@ -205,7 +204,7 @@ export class Guardbox {
 
     public async createOtp(
         options: OtpOptions,
-        duration = this.defaultOtpDuration
+        duration = this.defaultOtpDuration,
     ): Promise<Otp> {
         if (this.options.adapter.otp === undefined) {
             throw new Error('OTP adapter not found');

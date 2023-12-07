@@ -5,7 +5,7 @@ export const Layout: FC<{ title: string }> = (props: {
     title: string;
 }) => {
     return (
-        <html>
+        <html lang="ja">
             <head>
                 <title>{props.title}</title>
                 <meta

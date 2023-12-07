@@ -22,6 +22,9 @@
         "dist"
     ],
     "scripts": {
+        "lint": "bun x @biomejs/biome lint .",
+        "format": "bun x @biomejs/biome format . --write",
+        "check": "bun x @biomejs/biome check . --apply",
         "build": "bun tsc && bun build.ts"
     },
     "exports": {
@@ -70,6 +73,7 @@
         }
     },
     "devDependencies": {
+        "@biomejs/biome": "1.4.1",
         "bun-types": "latest",
         "esbuild": "^0.19.8"
     },
