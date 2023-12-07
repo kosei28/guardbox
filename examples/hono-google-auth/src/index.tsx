@@ -11,7 +11,6 @@ app.get('/', guardbox, async (c) => {
         const profile = getProfile(session.userId);
         return c.html(
             <Layout title="Guardbox example - Hono with Google Auth">
-                <h1>Guardbox example - Hono with Google Auth</h1>
                 <img src={profile?.picture} alt={profile?.name} />
                 <p>ようこそ、{profile?.name}さん。</p>
                 <form method="POST" action="/auth/logout">
@@ -22,7 +21,6 @@ app.get('/', guardbox, async (c) => {
     }
     return c.html(
         <Layout title="Guardbox example - Hono with Google Auth">
-            <h1>Guardbox example - Hono with Google Auth</h1>
             <a href="/auth/google/login">Googleでログイン</a>
         </Layout>,
     );

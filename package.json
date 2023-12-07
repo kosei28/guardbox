@@ -1,83 +1,65 @@
 {
-    "name": "guardbox",
-    "version": "0.0.1",
-    "description": "Easy and modern authentication library",
-    "keywords": [
-        "guardbox",
-        "auth",
-        "authentication",
-        "login",
-        "session"
-    ],
-    "author": "kosei28 <kosei28.jp@gmail.com> (https://github.com/kosei28)",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/kosei28/guardobx.git"
-    },
-    "type": "module",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "files": [
-        "dist"
-    ],
-    "scripts": {
-        "lint": "bun x @biomejs/biome lint .",
-        "format": "bun x @biomejs/biome format . --write",
-        "check": "bun x @biomejs/biome check . --apply",
-        "build": "bun tsc && bun build.ts"
-    },
-    "exports": {
-        ".": {
-            "import": "./dist/index.js",
-            "types": "./dist/index.d.ts"
-        },
-        "./types": {
-            "import": "./dist/types.js",
-            "types": "./dist/types.d.ts"
-        },
-        "./adapter": {
-            "import": "./dist/adapter.js",
-            "types": "./dist/adapter.d.ts"
-        },
-        "./adapters/memory": {
-            "import": "./dist/adapters/memory.js",
-            "types": "./dist/adapters/memory.d.ts"
-        },
-        "./providers/oauth2": {
-            "import": "./dist/providers/oauth2.js",
-            "types": "./dist/providers/oauth2.d.ts"
-        },
-        "./providers/google": {
-            "import": "./dist/providers/google.js",
-            "types": "./dist/providers/google.d.ts"
-        }
-    },
-    "typesVersions": {
-        "*": {
-            "types": [
-                "./dist/types.d.ts"
-            ],
-            "adapter": [
-                "./dist/adapter.d.ts"
-            ],
-            "adapters/memory": [
-                "./dist/adapters/memory.d.ts"
-            ],
-            "providers/oauth2": [
-                "./dist/providers/oauth2.d.ts"
-            ],
-            "providers/google": [
-                "./dist/providers/google.d.ts"
-            ]
-        }
-    },
-    "devDependencies": {
-        "@biomejs/biome": "1.4.1",
-        "bun-types": "latest",
-        "esbuild": "^0.19.8"
-    },
-    "peerDependencies": {
-        "typescript": "^5.0.0"
-    }
+	"name": "guardbox",
+	"version": "0.0.1",
+	"description": "Easy and modern authentication library",
+	"keywords": ["guardbox", "auth", "authentication", "login", "session"],
+	"author": "kosei28 <kosei28.jp@gmail.com> (https://github.com/kosei28)",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kosei28/guardobx.git"
+	},
+	"type": "module",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"lint": "bun x @biomejs/biome lint .",
+		"format": "bun x @biomejs/biome format . --write",
+		"check": "bun x @biomejs/biome check . --apply",
+		"build": "bun tsc && bun build.ts"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./types": {
+			"import": "./dist/types.js",
+			"types": "./dist/types.d.ts"
+		},
+		"./adapter": {
+			"import": "./dist/adapter.js",
+			"types": "./dist/adapter.d.ts"
+		},
+		"./adapters/memory": {
+			"import": "./dist/adapters/memory.js",
+			"types": "./dist/adapters/memory.d.ts"
+		},
+		"./providers/oauth2": {
+			"import": "./dist/providers/oauth2.js",
+			"types": "./dist/providers/oauth2.d.ts"
+		},
+		"./providers/google": {
+			"import": "./dist/providers/google.js",
+			"types": "./dist/providers/google.d.ts"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"types": ["./dist/types.d.ts"],
+			"adapter": ["./dist/adapter.d.ts"],
+			"adapters/memory": ["./dist/adapters/memory.d.ts"],
+			"providers/oauth2": ["./dist/providers/oauth2.d.ts"],
+			"providers/google": ["./dist/providers/google.d.ts"]
+		}
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.4.1",
+		"bun-types": "latest",
+		"esbuild": "^0.19.8"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }

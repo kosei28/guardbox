@@ -1,15 +1,66 @@
-# guardbox
+# Guardbox
 
-To install dependencies:
+Guardbox is an easy and modern authentication library.
+
+## Features
+
+- **Easy** - Authentication can be implemented without the need for specialized knowledge
+- **Framework Independent** - Can be used in any JavaScript/TypeScript project
+- **Adapter** - Abstraction of user and session management and greater flexibility in managing data
+- **Provider** - Custom providers can be implemented to support any authentication method
+
+## Quick Start
 
 ```bash
-bun install
+bun add guardbox    # npm install guardbox
 ```
 
-To run:
+```ts
+import { Guardbox } from 'guardbox';
+import { MemoryOtpAdapter, MemorySessionAdapter } from 'guardbox/adapters/memory';
+import { GoogleProvider } from 'guardbox/providers/google';
 
-```bash
-bun run src/index.ts
+const userAdapter = new MemoryUserAdapter();
+const sessionAdapter = new MemorySessionAdapter();
+
+const googleAuth = new GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    redirectUrl: 'http://localhost:3000/auth/google/callback',
+});
+
+// in request handler
+const auth = new Guardbox({
+    appName: 'guardbox',
+    adapter: {
+        user: userAdapter,
+        session: sessionAdapter,
+    },
+    cookies: {
+        get: (key) => {
+            return getCookie(req, key);
+        },
+        set: (key, value, options) => {
+            setCookie(req, key, value, options);
+        },
+        delete: (key, options) => {
+            deleteCookie(req, key, options);
+        },
+    },
+});
+
+// login
+const loginUrl = googleAuth.signIn(auth);
+redirect(loginUrl);
+
+// callback
+const code = getQuery(req, 'code');
+const state = getQuery(req, 'state');
+const session = await googleAuth.createSessionByCode(auth, code, state);
+if (session !== undefined) {
+    await auth.setSession(session);
+}
+
+// logout
+auth.signOut();
 ```
-
-This project was created using `bun init` in bun v1.0.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

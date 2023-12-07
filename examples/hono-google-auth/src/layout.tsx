@@ -13,7 +13,10 @@ export const Layout: FC<{ title: string }> = (props: {
                     content="width=device-width, initial-scale=1"
                 />
             </head>
-            <body>{props.children}</body>
+            <body>
+                <h1>{props.title}</h1>
+                {props.children}
+            </body>
         </html>
     );
 };
