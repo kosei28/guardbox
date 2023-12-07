@@ -30,7 +30,7 @@ export class OAuth2Provider {
     ) {}
 
     public stateCookieKey(appName: string): string {
-        return `${appName}-oauth2-state`;
+        return `${appName}-guardbox-oauth2-state`;
     }
 
     public signIn(auth: Guardbox): string {
