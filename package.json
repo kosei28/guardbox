@@ -17,7 +17,8 @@
 		"lint": "bun x @biomejs/biome lint .",
 		"format": "bun x @biomejs/biome format . --write",
 		"check": "bun x @biomejs/biome check . --apply",
-		"build": "bun tsc && bun build.ts"
+		"build": "rimraf dist && bun tsc && bun build.ts",
+		"prepare": "bun run build"
 	},
 	"exports": {
 		".": {
@@ -57,7 +58,8 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.4.1",
 		"bun-types": "latest",
-		"esbuild": "^0.19.8"
+		"esbuild": "^0.19.8",
+		"rimraf": "^5.0.5"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"
