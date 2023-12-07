@@ -1,5 +1,5 @@
 import type { Guardbox } from '..';
-import { User } from '../types';
+import type { User } from '../types';
 
 export type OAuth2Tokens = {
     access_token: string;

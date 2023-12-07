@@ -1,12 +1,12 @@
 import type { MiddlewareHandler } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
-import { Guardbox } from '../../../src/index';
+import { Guardbox } from 'guardbox';
 import {
     MemoryUserAdapter,
     MemorySessionAdapter,
     MemoryOtpAdapter,
-} from '../../../src/adapters/memory';
-import { GoogleProvider } from '../../../src/providers/google';
+} from 'guardbox/adapters/memory';
+import { GoogleProvider } from 'guardbox/providers/google';
 
 const adapter = {
     user: new MemoryUserAdapter(),
