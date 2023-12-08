@@ -94,7 +94,7 @@ export class OAuth2Provider {
         if (profile === undefined) {
             return undefined;
         }
-        const account = await auth.getAccountByKey(
+        const account = await auth.getAccount(
             this.options.provider,
             profile.id,
         );

@@ -4,7 +4,6 @@ import {
     GuardboxUserAdapter,
 } from '../adapter';
 import type {
-    AccountUpdateValue,
     AccountWithUserId,
     Otp,
     OtpOptions,
@@ -68,17 +67,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
         return value;
     }
 
-    public async getAccountByUserId(
-        provider: string,
-        userId: string,
-    ): Promise<AccountWithUserId | undefined> {
-        return this.accounts.find(
-            (account) =>
-                account.provider === provider && account.userId === userId,
-        );
-    }
-
-    public async getAccountByKey(
+    public async getAccount(
         provider: string,
         key: string,
     ): Promise<AccountWithUserId | undefined> {
@@ -87,28 +76,22 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
         );
     }
 
-    public async updateAccount(
+    public async getUserAccounts(
         userId: string,
-        provider: string,
-        value: AccountUpdateValue,
-    ): Promise<AccountWithUserId> {
-        const account = await this.getAccountByUserId(provider, userId);
-        if (!account) {
-            throw new Error('Account not found');
-        }
-        if (value.key) {
-            account.key = value.key;
-        }
-        if (value.metadata) {
-            account.metadata = value.metadata;
-        }
-        return account;
+        provider?: string,
+    ): Promise<AccountWithUserId[] | undefined> {
+        return this.accounts.filter(
+            (account) =>
+                account.userId === userId &&
+                (account.provider !== undefined
+                    ? account.provider === provider
+                    : true),
+        );
     }
 
-    public deleteAccount(userId: string, provider: string): void {
+    public deleteAccount(provider: string, key: string): void {
         this.accounts = this.accounts.filter(
-            (account) =>
-                account.userId !== userId || account.provider !== provider,
+            (account) => account.provider !== provider || account.key !== key,
         );
     }
 }
@@ -173,7 +156,7 @@ export class MemoryOtpAdapter extends GuardboxOtpAdapter {
         this.otps = this.otps.filter((otp) => otp.id !== otpId);
     }
 
-    public deleteOtpByUserId(userId: string, type?: string): void {
+    public deleteUserOtps(userId: string, type?: string): void {
         this.otps = this.otps.filter(
             (otp) =>
                 otp.userId !== userId ||

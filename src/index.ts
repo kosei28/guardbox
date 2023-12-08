@@ -1,6 +1,5 @@
 import type {
     Account,
-    AccountUpdateValue,
     AccountWithUserId,
     CookieOptions,
     GuardboxOptions,
@@ -117,32 +116,20 @@ export class Guardbox {
         return await this.options.adapter.user.addAccount(value);
     }
 
-    public async getAccountByUserId(
-        provider: string,
-        userId: string,
-    ): Promise<AccountWithUserId | undefined> {
-        return await this.options.adapter.user.getAccountByUserId(
-            provider,
-            userId,
-        );
-    }
-
-    public async getAccountByKey(
+    public async getAccount(
         provider: string,
         key: string,
     ): Promise<AccountWithUserId | undefined> {
-        return await this.options.adapter.user.getAccountByKey(provider, key);
+        return await this.options.adapter.user.getAccount(provider, key);
     }
 
-    public async updateAccount(
-        userId: string,
+    public async getUserAccounts(
         provider: string,
-        value: AccountUpdateValue,
-    ): Promise<AccountWithUserId> {
-        return await this.options.adapter.user.updateAccount(
+        userId: string,
+    ): Promise<AccountWithUserId[] | undefined> {
+        return await this.options.adapter.user.getUserAccounts(
             userId,
             provider,
-            value,
         );
     }
 
@@ -245,10 +232,10 @@ export class Guardbox {
         await this.options.adapter.otp.deleteOtp(otpId);
     }
 
-    public async deleteOtpByUserId(userId: string, type?: string) {
+    public async deleteUserOtps(userId: string, type?: string) {
         if (this.options.adapter.otp === undefined) {
             throw new Error('OTP adapter not found');
         }
-        await this.options.adapter.otp.deleteOtpByUserId(userId, type);
+        await this.options.adapter.otp.deleteUserOtps(userId, type);
     }
 }

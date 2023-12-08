@@ -1,5 +1,4 @@
 import type {
-    AccountUpdateValue,
     AccountWithUserId,
     Otp,
     OtpOptions,
@@ -28,21 +27,15 @@ export abstract class GuardboxUserAdapter {
         value: AccountWithUserId,
     ): Promise<AccountWithUserId>;
 
-    public abstract getAccountByUserId(
-        provider: string,
-        userId: string,
-    ): Promise<AccountWithUserId | undefined>;
-
-    public abstract getAccountByKey(
+    public abstract getAccount(
         provider: string,
         key: string,
     ): Promise<AccountWithUserId | undefined>;
 
-    public abstract updateAccount(
+    public abstract getUserAccounts(
         userId: string,
         provider: string,
-        value: AccountUpdateValue,
-    ): Promise<AccountWithUserId>;
+    ): Promise<AccountWithUserId[] | undefined>;
 
     public abstract deleteAccount(userId: string, provider: string): void;
 }
@@ -70,5 +63,5 @@ export abstract class GuardboxOtpAdapter {
 
     public abstract deleteOtp(otpId: string): void;
 
-    public abstract deleteOtpByUserId(userId: string, type?: string): void;
+    public abstract deleteUserOtps(userId: string, type?: string): void;
 }

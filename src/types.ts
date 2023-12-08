@@ -51,11 +51,6 @@ export type AccountWithUserId = Account & {
     userId: string;
 };
 
-export type AccountUpdateValue = {
-    key?: string;
-    metadata?: Record<string, unknown>;
-};
-
 export type Session = {
     id: string;
     userId: string;
