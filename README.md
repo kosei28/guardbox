@@ -8,6 +8,7 @@ Guardbox is an easy and modern authentication library.
 - **Framework Independent** - Guardbox can be used in any JavaScript/TypeScript project
 - **Adapter** - Abstraction of user and session management and greater flexibility in managing data
 - **Provider** - Custom providers can be implemented to support any authentication method
+- **Acount Linking** - Automatically link accounts with the same email
 - **One Time Password** - Easily implement email address verification, etc.
 
 ## Quick Start
