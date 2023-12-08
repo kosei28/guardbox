@@ -109,27 +109,17 @@ export class OAuth2Provider {
                 return undefined;
             }
         } else {
-            user = await auth.getUserByEmail(profile.email ?? '');
-            if (user !== undefined) {
-                await auth.addAccount({
-                    userId: user.id,
+            user = await auth.createUser(
+                {
+                    email: profile.email,
+                    emailVerified: profile.emailVerified,
+                },
+                {
                     provider: this.options.provider,
                     key: profile.id,
                     metadata: profile.raw,
-                });
-            } else {
-                user = await auth.createUser(
-                    {
-                        email: profile.email,
-                        emailVerified: profile.emailVerified,
-                    },
-                    {
-                        provider: this.options.provider,
-                        key: profile.id,
-                        metadata: profile.raw,
-                    },
-                );
-            }
+                },
+            );
         }
         return await auth.createSession(user.id);
     }

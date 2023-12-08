@@ -70,7 +70,15 @@ export class Guardbox {
         value: UserCreateValue,
         account?: Account,
     ): Promise<User> {
-        const user = await this.options.adapter.user.createUser(value);
+        let user: User | undefined;
+        let newUserCreated = false;
+        if (value.email !== undefined && value.emailVerified) {
+            user = await this.getUserByEmail(value.email);
+        }
+        if (user === undefined) {
+            user = await this.options.adapter.user.createUser(value);
+            newUserCreated = true;
+        }
         let newAccount;
         if (account !== undefined) {
             newAccount = await this.addAccount({
@@ -78,7 +86,7 @@ export class Guardbox {
                 ...account,
             });
         }
-        if (this.options.onUserCreate !== undefined) {
+        if (newUserCreated && this.options.onUserCreate !== undefined) {
             await this.options.onUserCreate(user, newAccount);
         }
         return user;
