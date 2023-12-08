@@ -51,18 +51,18 @@ const auth = new Guardbox({
     },
 });
 
-// login
-const loginUrl = googleAuth.signIn(auth);
-redirect(loginUrl);
+// sign in
+const signInUrl = googleAuth.getSignInUrl(auth);
+redirect(signInUrl);
 
 // callback
 const code = getQuery(req, 'code');
 const state = getQuery(req, 'state');
-const session = await googleAuth.createSessionByCode(auth, code, state);
+const session = await googleAuth.createSession(auth, code, state);
 if (session !== undefined) {
     await auth.setSession(session);
 }
 
-// logout
+// sign out
 await auth.signOut();
 ```

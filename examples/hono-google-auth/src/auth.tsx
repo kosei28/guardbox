@@ -5,19 +5,15 @@ import { Layout } from './layout';
 export const authApp = new Hono();
 
 authApp.get('/google/login', guardbox, async (c) => {
-    const loginUrl = googleAuth.signIn(c.var.auth);
-    return c.redirect(loginUrl);
+    const signInUrl = googleAuth.getSignInUrl(c.var.auth);
+    return c.redirect(signInUrl);
 });
 
 authApp.get('/google/callback', guardbox, async (c) => {
     const code = c.req.query('code');
     const state = c.req.query('state');
     if (code !== undefined && state !== undefined) {
-        const session = await googleAuth.createSessionByCode(
-            c.var.auth,
-            code,
-            state,
-        );
+        const session = await googleAuth.createSession(c.var.auth, code, state);
         if (session !== undefined) {
             await c.var.auth.setSession(session);
             return c.redirect('/');

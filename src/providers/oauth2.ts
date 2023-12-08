@@ -33,7 +33,7 @@ export class OAuth2Provider {
         return `${appName}-guardbox-oauth2-state`;
     }
 
-    public signIn(auth: Guardbox): string {
+    public getSignInUrl(auth: Guardbox): string {
         const state = Math.random().toString(36).slice(2);
         auth.setCookie(this.stateCookieKey(auth.appName), state);
         const params = new URLSearchParams({
@@ -50,11 +50,11 @@ export class OAuth2Provider {
         return url.toString();
     }
 
-    public async verifyCode(
+    public async getTokens(
         auth: Guardbox,
         code: string,
         state: string,
-    ): Promise<OAuth2Profile | undefined> {
+    ): Promise<OAuth2Tokens | undefined> {
         const savedState = await auth.getCookie(
             this.stateCookieKey(auth.appName),
         );
@@ -79,22 +79,18 @@ export class OAuth2Provider {
                 throw new Error(error);
             }
             const tokens: OAuth2Tokens = await res.json();
-            const profile = await this.options.getProfile(tokens);
-            if (profile === undefined) {
-                throw new Error('Invalid token');
-            }
-            return profile;
+            return tokens;
         } catch (e) {
             return undefined;
         }
     }
 
-    public async createSessionByCode(
-        auth: Guardbox,
-        code: string,
-        state: string,
-    ) {
-        const profile = await this.verifyCode(auth, code, state);
+    public async createSession(auth: Guardbox, code: string, state: string) {
+        const tokens = await this.getTokens(auth, code, state);
+        if (tokens === undefined) {
+            return undefined;
+        }
+        const profile = await this.options.getProfile(tokens);
         if (profile === undefined) {
             return undefined;
         }
