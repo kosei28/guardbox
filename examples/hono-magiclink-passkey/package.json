@@ -1,14 +1,14 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "bun run --hot src/index.tsx"
-  },
-  "dependencies": {
-    "guardbox": "../..",
-    "hono": "^3.11.2",
-    "resend": "^2.0.0"
-  },
-  "devDependencies": {
-    "bun-types": "^1.0.7"
-  }
+    "private": true,
+    "scripts": {
+        "dev": "bun run --hot src/index.tsx"
+    },
+    "dependencies": {
+        "guardbox": "0.0.2",
+        "hono": "^3.11.2",
+        "resend": "^2.0.0"
+    },
+    "devDependencies": {
+        "bun-types": "^1.0.7"
+    }
 }
