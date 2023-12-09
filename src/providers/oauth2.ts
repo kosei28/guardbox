@@ -83,19 +83,18 @@ export class OAuth2Provider {
         }
     }
 
-    // TODO: change to authenticate (add setSession)
-    public async createSession(
+    public async authenticate(
         auth: Guardbox,
         code: string,
         state: string,
-    ): Promise<Session | undefined> {
+    ): Promise<boolean> {
         const tokens = await this.getTokens(auth, code, state);
         if (tokens === undefined) {
-            return undefined;
+            return false;
         }
         const profile = await this.options.getProfile(tokens);
         if (profile === undefined) {
-            return undefined;
+            return false;
         }
         const account = await auth.getAccount(
             this.options.provider,
@@ -105,7 +104,7 @@ export class OAuth2Provider {
         if (account !== undefined) {
             user = await auth.getUserById(account.userId);
             if (user === undefined) {
-                return undefined;
+                return false;
             }
         } else {
             user = await auth.createUser(
@@ -120,6 +119,8 @@ export class OAuth2Provider {
                 },
             );
         }
-        return await auth.createSession(user.id);
+        const session = await auth.createSession(user.id);
+        await auth.setSession(session);
+        return true;
     }
 }

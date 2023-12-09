@@ -58,10 +58,7 @@ redirect(signInUrl);
 // callback
 const code = getQuery(req, 'code');
 const state = getQuery(req, 'state');
-const session = await googleAuth.createSession(auth, code, state);
-if (session !== undefined) {
-    await auth.setSession(session);
-}
+const success = await googleAuth.authenticate(auth, code, state);
 
 // sign out
 await auth.signOut();

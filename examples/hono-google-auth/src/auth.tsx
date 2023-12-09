@@ -13,9 +13,8 @@ authApp.get('/google/callback', guardbox, async (c) => {
     const code = c.req.query('code');
     const state = c.req.query('state');
     if (code !== undefined && state !== undefined) {
-        const session = await googleAuth.createSession(c.var.auth, code, state);
-        if (session !== undefined) {
-            await c.var.auth.setSession(session);
+        const success = await googleAuth.authenticate(c.var.auth, code, state);
+        if (success) {
             return c.redirect('/');
         }
     }
