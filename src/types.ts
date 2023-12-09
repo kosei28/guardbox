@@ -71,14 +71,14 @@ export type SessionDuration = {
 export type Otp = {
     id: string;
     type: string;
-    userId: string;
+    userId?: string;
     state?: string;
     expiresAt: Date;
 };
 
 export type OtpOptions = {
     type: string;
-    userId: string;
+    userId?: string;
     state?: string;
 };
 

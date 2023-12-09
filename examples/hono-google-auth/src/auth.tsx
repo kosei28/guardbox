@@ -28,9 +28,9 @@ authApp.post('/logout', guardbox, async (c) => {
 
 authApp.get('/error', async (c) => {
     return c.html(
-        <Layout title="ログインに失敗しました">
-            <p>再度ログインしてください。</p>
-            <a href="/">トップに戻る</a>
+        <Layout title="Failed to Login">
+            <p>Please try to login again.</p>
+            <a href="/">Back to Top</a>
         </Layout>,
     );
 });

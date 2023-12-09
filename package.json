@@ -34,6 +34,10 @@
             "import": "./dist/adapters/memory.js",
             "types": "./dist/adapters/memory.d.ts"
         },
+        "./providers/passkey": {
+            "import": "./dist/providers/passkey.js",
+            "types": "./dist/providers/passkey.d.ts"
+        },
         "./providers/oauth2": {
             "import": "./dist/providers/oauth2.js",
             "types": "./dist/providers/oauth2.d.ts"
@@ -61,6 +65,7 @@
             "types": ["./dist/types.d.ts"],
             "adapter": ["./dist/adapter.d.ts"],
             "adapters/memory": ["./dist/adapters/memory.d.ts"],
+            "providers/passkey": ["./dist/providers/passkey.d.ts"],
             "providers/oauth2": ["./dist/providers/oauth2.d.ts"],
             "providers/google": ["./dist/providers/google.d.ts"]
         }

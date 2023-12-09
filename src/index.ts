@@ -128,8 +128,8 @@ export class Guardbox {
     }
 
     public async getUserAccounts<T = unknown>(
-        provider: string,
         userId: string,
+        provider: string,
     ): Promise<AccountWithUserId<T>[]> {
         return (await this.options.adapter.user.getUserAccounts(
             userId,

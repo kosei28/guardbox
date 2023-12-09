@@ -12,7 +12,7 @@ import type {
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
 import type { Guardbox } from '..';
-import { base64ToBytes, bytesToBase64 } from '../utils';
+import { base64urlToBytes, bytesToBase64url } from '../utils';
 
 export type PasskeyMetadata = {
     id: string;
@@ -23,7 +23,7 @@ export type PasskeyMetadata = {
 };
 
 export class PasskeyProvider {
-    private providerName = 'passkey';
+    public providerName = 'passkey';
 
     constructor(
         private config: { rpID: string; rpName: string; origin: string },
@@ -58,7 +58,7 @@ export class PasskeyProvider {
             excludeCredentials: userAccounts
                 .filter((account) => account.provider === this.providerName)
                 .map((account) => ({
-                    id: base64ToBytes(account.key),
+                    id: base64urlToBytes(account.key),
                     type: 'public-key',
                 })),
         });
@@ -93,8 +93,8 @@ export class PasskeyProvider {
             return false;
         }
         const metadata: PasskeyMetadata = {
-            id: bytesToBase64(registrationInfo.credentialID),
-            pabulickKey: bytesToBase64(registrationInfo.credentialPublicKey),
+            id: bytesToBase64url(registrationInfo.credentialID),
+            pabulickKey: bytesToBase64url(registrationInfo.credentialPublicKey),
             counter: registrationInfo.counter,
             deviceType: registrationInfo.credentialDeviceType,
             backedUp: registrationInfo.credentialBackedUp,
@@ -143,8 +143,8 @@ export class PasskeyProvider {
                 expectedRPID: this.config.rpID,
                 expectedOrigin: this.config.origin,
                 authenticator: {
-                    credentialID: base64ToBytes(account.metadata.id),
-                    credentialPublicKey: base64ToBytes(
+                    credentialID: base64urlToBytes(account.metadata.id),
+                    credentialPublicKey: base64urlToBytes(
                         account.metadata.pabulickKey,
                     ),
                     counter: account.metadata.counter,

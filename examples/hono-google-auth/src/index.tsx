@@ -12,16 +12,16 @@ app.get('/', guardbox, async (c) => {
         return c.html(
             <Layout title="Guardbox example - Hono with Google Auth">
                 <img src={profile?.picture} alt={profile?.name} />
-                <p>ようこそ、{profile?.name}さん。</p>
+                <p>Welcome {profile?.name}</p>
                 <form method="POST" action="/auth/logout">
-                    <button type="submit">ログアウト</button>
+                    <button type="submit">Logout</button>
                 </form>
             </Layout>,
         );
     }
     return c.html(
         <Layout title="Guardbox example - Hono with Google Auth">
-            <a href="/auth/google/login">Googleでログイン</a>
+            <a href="/auth/google/login">Login with Google</a>
         </Layout>,
     );
 });

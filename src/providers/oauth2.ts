@@ -29,6 +29,10 @@ export class OAuth2Provider {
         },
     ) {}
 
+    public get providerName() {
+        return this.options.provider;
+    }
+
     private stateCookieKey(auth: Guardbox): string {
         return `${auth.appName}-guardbox-oauth2-state`;
     }
