@@ -110,27 +110,43 @@ export class Guardbox {
         await this.options.adapter.user.deleteUser(userId);
     }
 
-    public async addAccount(
-        value: AccountWithUserId,
-    ): Promise<AccountWithUserId> {
-        return await this.options.adapter.user.addAccount(value);
+    public async addAccount<T = unknown>(
+        value: AccountWithUserId<T>,
+    ): Promise<AccountWithUserId<T>> {
+        return (await this.options.adapter.user.addAccount(
+            value,
+        )) as AccountWithUserId<T>;
     }
 
-    public async getAccount(
+    public async getAccount<T = unknown>(
         provider: string,
         key: string,
-    ): Promise<AccountWithUserId | undefined> {
-        return await this.options.adapter.user.getAccount(provider, key);
+    ): Promise<AccountWithUserId<T> | undefined> {
+        return (await this.options.adapter.user.getAccount(provider, key)) as
+            | AccountWithUserId<T>
+            | undefined;
     }
 
-    public async getUserAccounts(
+    public async getUserAccounts<T = unknown>(
         provider: string,
         userId: string,
-    ): Promise<AccountWithUserId[] | undefined> {
-        return await this.options.adapter.user.getUserAccounts(
+    ): Promise<AccountWithUserId<T>[]> {
+        return (await this.options.adapter.user.getUserAccounts(
             userId,
             provider,
-        );
+        )) as AccountWithUserId<T>[];
+    }
+
+    public async updateAccountMetadata<T = unknown>(
+        provider: string,
+        key: string,
+        metadata: T,
+    ): Promise<AccountWithUserId<T>> {
+        return (await this.options.adapter.user.updateAccountMetadata(
+            provider,
+            key,
+            metadata,
+        )) as AccountWithUserId<T>;
     }
 
     public async deleteAccount(userId: string, provider: string) {

@@ -1,5 +1,16 @@
 import { OAuth2Provider } from './oauth2';
 
+export type GoogleMetadata = {
+    sub: string;
+    name: string;
+    given_name: string;
+    family_name: string;
+    picture: string;
+    email: string;
+    email_verified: boolean;
+    locale: string;
+};
+
 export class GoogleProvider extends OAuth2Provider {
     constructor(options: {
         clientId: string;
@@ -24,9 +35,9 @@ export class GoogleProvider extends OAuth2Provider {
                             },
                         },
                     );
-                    const raw = await res.json();
+                    const raw: GoogleMetadata = await res.json();
                     const profile = {
-                        id: raw.sub,
+                        sub: raw.sub,
                         email: raw.email,
                         emailVerified: raw.email_verified,
                         raw,

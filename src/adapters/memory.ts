@@ -4,6 +4,7 @@ import {
     GuardboxUserAdapter,
 } from '../adapter';
 import type {
+    Account,
     AccountWithUserId,
     Otp,
     OtpOptions,
@@ -79,7 +80,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     public async getUserAccounts(
         userId: string,
         provider?: string,
-    ): Promise<AccountWithUserId[] | undefined> {
+    ): Promise<AccountWithUserId[]> {
         return this.accounts.filter(
             (account) =>
                 account.userId === userId &&
@@ -87,6 +88,19 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
                     ? account.provider === provider
                     : true),
         );
+    }
+
+    public async updateAccountMetadata(
+        provider: string,
+        key: string,
+        metadata: unknown,
+    ): Promise<AccountWithUserId> {
+        const account = await this.getAccount(provider, key);
+        if (account === undefined) {
+            throw new Error('Account not found');
+        }
+        account.metadata = metadata;
+        return account;
     }
 
     public deleteAccount(provider: string, key: string): void {

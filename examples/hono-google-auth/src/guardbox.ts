@@ -5,6 +5,7 @@ import {
     MemoryUserAdapter,
 } from 'guardbox/adapters/memory';
 import { GoogleProvider } from 'guardbox/providers/google';
+import type { GoogleMetadata } from 'guardbox/providers/google';
 import type { MiddlewareHandler } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 
@@ -44,10 +45,11 @@ export const guardbox: MiddlewareHandler<{
             },
         },
         onUserCreate(user, account) {
+            const metadata = account?.metadata as GoogleMetadata;
             profiles.push({
                 id: user.id,
-                name: account?.metadata?.name as string | undefined,
-                picture: account?.metadata?.picture as string | undefined,
+                name: metadata.name,
+                picture: metadata.picture,
             });
         },
     });

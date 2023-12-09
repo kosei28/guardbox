@@ -1,5 +1,5 @@
 import type { Guardbox } from '..';
-import type { User } from '../types';
+import type { Session, User } from '../types';
 
 export type OAuth2Tokens = {
     access_token: string;
@@ -7,10 +7,10 @@ export type OAuth2Tokens = {
 };
 
 export type OAuth2Profile = {
-    id: string;
+    sub: string;
     email?: string;
     emailVerified: boolean;
-    raw: Record<string, unknown>;
+    raw: unknown;
 };
 
 export class OAuth2Provider {
@@ -29,13 +29,13 @@ export class OAuth2Provider {
         },
     ) {}
 
-    public stateCookieKey(appName: string): string {
-        return `${appName}-guardbox-oauth2-state`;
+    private stateCookieKey(auth: Guardbox): string {
+        return `${auth.appName}-guardbox-oauth2-state`;
     }
 
     public getSignInUrl(auth: Guardbox): string {
         const state = Math.random().toString(36).slice(2);
-        auth.setCookie(this.stateCookieKey(auth.appName), state);
+        auth.setCookie(this.stateCookieKey(auth), state);
         const params = new URLSearchParams({
             response_type: 'code',
             client_id: this.options.clientId,
@@ -55,10 +55,8 @@ export class OAuth2Provider {
         code: string,
         state: string,
     ): Promise<OAuth2Tokens | undefined> {
-        const savedState = await auth.getCookie(
-            this.stateCookieKey(auth.appName),
-        );
-        await auth.deleteCookie(this.stateCookieKey(auth.appName));
+        const savedState = await auth.getCookie(this.stateCookieKey(auth));
+        await auth.deleteCookie(this.stateCookieKey(auth));
         if (savedState !== state) {
             return undefined;
         }
@@ -85,7 +83,12 @@ export class OAuth2Provider {
         }
     }
 
-    public async createSession(auth: Guardbox, code: string, state: string) {
+    // TODO: change to authenticate (add setSession)
+    public async createSession(
+        auth: Guardbox,
+        code: string,
+        state: string,
+    ): Promise<Session | undefined> {
         const tokens = await this.getTokens(auth, code, state);
         if (tokens === undefined) {
             return undefined;
@@ -96,7 +99,7 @@ export class OAuth2Provider {
         }
         const account = await auth.getAccount(
             this.options.provider,
-            profile.id,
+            profile.sub,
         );
         let user: User | undefined;
         if (account !== undefined) {
@@ -112,7 +115,7 @@ export class OAuth2Provider {
                 },
                 {
                     provider: this.options.provider,
-                    key: profile.id,
+                    key: profile.sub,
                     metadata: profile.raw,
                 },
             );

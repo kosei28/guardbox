@@ -41,13 +41,18 @@ export type UserUpdateValue = {
     emailVerified?: boolean;
 };
 
-export type Account = {
+export type Account<T = unknown> = {
     provider: string;
     key: string;
-    metadata?: Record<string, unknown>;
-};
+} & (unknown extends T
+    ? {
+          metadata?: unknown;
+      }
+    : {
+          metadata: T;
+      });
 
-export type AccountWithUserId = Account & {
+export type AccountWithUserId<T = unknown> = Account<T> & {
     userId: string;
 };
 
