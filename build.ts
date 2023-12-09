@@ -9,7 +9,7 @@ const addJsExtension: Plugin = {
         build.onResolve({ filter: /.*/ }, async (args) => {
             if (args.importer) {
                 let tsPath = `${path.join(args.resolveDir, args.path)}.ts`;
-                let importPath = '';
+                let importPath: string | undefined;
                 if (await file(tsPath).exists()) {
                     importPath = `${args.path}.js`;
                 } else {
@@ -18,7 +18,9 @@ const addJsExtension: Plugin = {
                         importPath = `${args.path}/index.js`;
                     }
                 }
-                return { path: importPath, external: true };
+                if (importPath !== undefined) {
+                    return { path: importPath, external: true };
+                }
             }
         });
     },
