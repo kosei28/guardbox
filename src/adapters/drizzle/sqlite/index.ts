@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm';
-import type { PgDatabase } from 'drizzle-orm/pg-core';
+import type { BaseSQLiteDatabase } from 'drizzle-orm/sqlite-core';
 import { OtpAdapter, SessionAdapter, UserAdapter } from '../../../adapter';
 import type {
 	AccountWithUserId,
@@ -12,16 +12,16 @@ import type {
 	UserUpdateValue,
 } from '../../../types';
 import type {
-	PgAccountTable,
-	PgOtpTable,
-	PgSessionTable,
-	PgUserTable,
+	SQLiteAccountTable,
+	SQLiteOtpTable,
+	SQLiteSessionTable,
+	SQLiteUserTable,
 } from './types';
 
-export class DrizzlePgUserAdapter implements UserAdapter {
+export class DrizzleSQLiteUserAdapter implements UserAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { user: PgUserTable; account: PgAccountTable },
+		private db: BaseSQLiteDatabase<'async' | 'sync', unknown>,
+		private tables: { user: SQLiteUserTable; account: SQLiteAccountTable },
 	) {}
 
 	public async createUser(value: UserCreateValue): Promise<User> {
@@ -147,10 +147,10 @@ export class DrizzlePgUserAdapter implements UserAdapter {
 	}
 }
 
-export class DrizzlePgSessionAdapter implements SessionAdapter {
+export class DrizzleSQLiteSessionAdapter implements SessionAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { session: PgSessionTable },
+		private db: BaseSQLiteDatabase<'async' | 'sync', unknown>,
+		private tables: { session: SQLiteSessionTable },
 	) {}
 
 	public async createSession(
@@ -190,10 +190,10 @@ export class DrizzlePgSessionAdapter implements SessionAdapter {
 	}
 }
 
-export class DrizzlePgOtpAdapter implements OtpAdapter {
+export class DrizzleSQLiteOtpAdapter implements OtpAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { otp: PgOtpTable },
+		private db: BaseSQLiteDatabase<'async' | 'sync', unknown>,
+		private tables: { otp: SQLiteOtpTable },
 	) {}
 
 	public async createOtp(options: OtpOptions, duration: number): Promise<Otp> {

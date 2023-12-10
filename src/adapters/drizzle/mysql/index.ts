@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm';
-import type { PgDatabase } from 'drizzle-orm/pg-core';
+import type { MySqlDatabase } from 'drizzle-orm/mysql-core';
 import { OtpAdapter, SessionAdapter, UserAdapter } from '../../../adapter';
 import type {
 	AccountWithUserId,
@@ -12,27 +12,25 @@ import type {
 	UserUpdateValue,
 } from '../../../types';
 import type {
-	PgAccountTable,
-	PgOtpTable,
-	PgSessionTable,
-	PgUserTable,
+	MySqlAccountTable,
+	MySqlOtpTable,
+	MySqlSessionTable,
+	MySqlUserTable,
 } from './types';
 
-export class DrizzlePgUserAdapter implements UserAdapter {
+export class DrizzleMySqlUserAdapter implements UserAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { user: PgUserTable; account: PgAccountTable },
+		private db: MySqlDatabase<any, any>,
+		private tables: { user: MySqlUserTable; account: MySqlAccountTable },
 	) {}
 
 	public async createUser(value: UserCreateValue): Promise<User> {
-		const [user] = await this.db
-			.insert(this.tables.user)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...value,
-				email: value.email,
-			})
-			.returning();
+		const user = {
+			id: Math.random().toString(36).slice(2),
+			...value,
+			email: value.email ?? null,
+		};
+		await this.db.insert(this.tables.user).values(user);
 		return user;
 	}
 
@@ -57,10 +55,16 @@ export class DrizzlePgUserAdapter implements UserAdapter {
 		value: UserUpdateValue,
 	): Promise<User | undefined> {
 		const [user] = await this.db
+			.select()
+			.from(this.tables.user)
+			.where(eq(this.tables.user.id, userId));
+		if (user === undefined) {
+			return;
+		}
+		await this.db
 			.update(this.tables.user)
 			.set(value)
-			.where(eq(this.tables.user.id, userId))
-			.returning();
+			.where(eq(this.tables.user.id, user.id));
 		return user;
 	}
 
@@ -73,13 +77,11 @@ export class DrizzlePgUserAdapter implements UserAdapter {
 	public async addAccount(
 		value: AccountWithUserId,
 	): Promise<AccountWithUserId> {
-		const [account] = await this.db
-			.insert(this.tables.account)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...value,
-			})
-			.returning();
+		const account = {
+			id: Math.random().toString(36).slice(2),
+			...value,
+		};
+		await this.db.insert(this.tables.account).values(account);
 		return account;
 	}
 
@@ -123,15 +125,21 @@ export class DrizzlePgUserAdapter implements UserAdapter {
 		metadata: unknown,
 	): Promise<AccountWithUserId | undefined> {
 		const [account] = await this.db
-			.update(this.tables.account)
-			.set({ metadata })
+			.select()
+			.from(this.tables.account)
 			.where(
 				and(
 					eq(this.tables.account.provider, provider),
 					eq(this.tables.account.key, key),
 				),
-			)
-			.returning();
+			);
+		if (account === undefined) {
+			return;
+		}
+		await this.db
+			.update(this.tables.account)
+			.set({ metadata })
+			.where(eq(this.tables.account.id, account.id));
 		return account;
 	}
 
@@ -147,25 +155,23 @@ export class DrizzlePgUserAdapter implements UserAdapter {
 	}
 }
 
-export class DrizzlePgSessionAdapter implements SessionAdapter {
+export class DrizzleMySqlSessionAdapter implements SessionAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { session: PgSessionTable },
+		private db: MySqlDatabase<any, any>,
+		private tables: { session: MySqlSessionTable },
 	) {}
 
 	public async createSession(
 		userId: string,
 		duration: SessionDuration,
 	): Promise<Session> {
-		const [session] = await this.db
-			.insert(this.tables.session)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				userId,
-				activeExpiresAt: new Date(Date.now() + duration.active),
-				idleExpiresAt: new Date(Date.now() + duration.active + duration.idle),
-			})
-			.returning();
+		const session = {
+			id: Math.random().toString(36).slice(2),
+			userId,
+			activeExpiresAt: new Date(Date.now() + duration.active),
+			idleExpiresAt: new Date(Date.now() + duration.active + duration.idle),
+		};
+		await this.db.insert(this.tables.session).values(session);
 		return session;
 	}
 
@@ -190,21 +196,21 @@ export class DrizzlePgSessionAdapter implements SessionAdapter {
 	}
 }
 
-export class DrizzlePgOtpAdapter implements OtpAdapter {
+export class DrizzleMySqlOtpAdapter implements OtpAdapter {
 	constructor(
-		private db: PgDatabase<any>,
-		private tables: { otp: PgOtpTable },
+		private db: MySqlDatabase<any, any>,
+		private tables: { otp: MySqlOtpTable },
 	) {}
 
 	public async createOtp(options: OtpOptions, duration: number): Promise<Otp> {
-		const [otp] = await this.db
-			.insert(this.tables.otp)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...options,
-				expiresAt: new Date(Date.now() + duration),
-			})
-			.returning();
+		const otp = {
+			id: Math.random().toString(36).slice(2),
+			...options,
+			userId: options.userId ?? null,
+			state: options.state ?? null,
+			expiresAt: new Date(Date.now() + duration),
+		};
+		await this.db.insert(this.tables.otp).values(otp);
 		return otp;
 	}
 

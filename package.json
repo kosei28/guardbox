@@ -1,79 +1,84 @@
 {
-  "name": "guardbox",
-  "version": "0.0.3",
-  "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kosei28/guardobx.git"
-  },
-  "main": "dist/index.js",
-  "devDependencies": {
-    "@biomejs/biome": "1.4.1",
-    "@simplewebauthn/server": "^8.3.5",
-    "bun-types": "latest",
-    "drizzle-orm": "^0.29.1",
-    "esbuild": "^0.19.8",
-    "rimraf": "^5.0.5"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "name": "guardbox",
+    "version": "0.0.3",
+    "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kosei28/guardobx.git"
     },
-    "./types": {
-      "import": "./dist/types.js",
-      "types": "./dist/types.d.ts"
+    "main": "dist/index.js",
+    "devDependencies": {
+        "@biomejs/biome": "1.4.1",
+        "@simplewebauthn/server": "^8.3.5",
+        "bun-types": "latest",
+        "drizzle-orm": "^0.29.1",
+        "esbuild": "^0.19.8",
+        "rimraf": "^5.0.5"
     },
-    "./adapter": {
-      "import": "./dist/adapter.js",
-      "types": "./dist/adapter.d.ts"
+    "peerDependencies": {
+        "typescript": "^5.0.0"
     },
-    "./adapters/memory": {
-      "import": "./dist/adapters/memory.js",
-      "types": "./dist/adapters/memory.d.ts"
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./types": {
+            "import": "./dist/types.js",
+            "types": "./dist/types.d.ts"
+        },
+        "./adapter": {
+            "import": "./dist/adapter.js",
+            "types": "./dist/adapter.d.ts"
+        },
+        "./adapters/memory": {
+            "import": "./dist/adapters/memory.js",
+            "types": "./dist/adapters/memory.d.ts"
+        },
+        "./adapters/drizzle": {
+            "import": "./dist/adapters/drizzle.js",
+            "types": "./dist/adapters/drizzle.d.ts"
+        },
+        "./providers/passkey": {
+            "import": "./dist/providers/passkey.js",
+            "types": "./dist/providers/passkey.d.ts"
+        },
+        "./providers/oauth2": {
+            "import": "./dist/providers/oauth2.js",
+            "types": "./dist/providers/oauth2.d.ts"
+        },
+        "./providers/google": {
+            "import": "./dist/providers/google.js",
+            "types": "./dist/providers/google.d.ts"
+        },
+        "./providers/github": {
+            "import": "./dist/providers/github.js",
+            "types": "./dist/providers/github.d.ts"
+        }
     },
-    "./providers/passkey": {
-      "import": "./dist/providers/passkey.js",
-      "types": "./dist/providers/passkey.d.ts"
+    "description": "Easy and modern authentication library",
+    "files": ["dist"],
+    "keywords": ["guardbox", "auth", "authentication", "login", "session"],
+    "license": "MIT",
+    "scripts": {
+        "lint": "bun x @biomejs/biome lint .",
+        "format": "bun x @biomejs/biome format . --write",
+        "check": "bun x @biomejs/biome check . --apply",
+        "build": "rimraf dist && bun tsc && bun build.ts",
+        "prepare": "bun run build"
     },
-    "./providers/oauth2": {
-      "import": "./dist/providers/oauth2.js",
-      "types": "./dist/providers/oauth2.d.ts"
-    },
-    "./providers/google": {
-      "import": "./dist/providers/google.js",
-      "types": "./dist/providers/google.d.ts"
-    },
-    "./providers/github": {
-      "import": "./dist/providers/github.js",
-      "types": "./dist/providers/github.d.ts"
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "typesVersions": {
+        "*": {
+            "types": ["./dist/types.d.ts"],
+            "adapter": ["./dist/adapter.d.ts"],
+            "adapters/memory": ["./dist/adapters/memory.d.ts"],
+            "adapters/drizzle": ["./dist/adapters/drizzle.d.ts"],
+            "providers/passkey": ["./dist/providers/passkey.d.ts"],
+            "providers/oauth2": ["./dist/providers/oauth2.d.ts"],
+            "providers/google": ["./dist/providers/google.d.ts"],
+            "providers/github": ["./dist/providers/github.d.ts"]
+        }
     }
-  },
-  "description": "Easy and modern authentication library",
-  "files": ["dist"],
-  "keywords": ["guardbox", "auth", "authentication", "login", "session"],
-  "license": "MIT",
-  "scripts": {
-    "lint": "bun x @biomejs/biome lint .",
-    "format": "bun x @biomejs/biome format . --write",
-    "check": "bun x @biomejs/biome check . --apply",
-    "build": "rimraf dist && bun tsc && bun build.ts",
-    "prepare": "bun run build"
-  },
-  "type": "module",
-  "types": "dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "types": ["./dist/types.d.ts"],
-      "adapter": ["./dist/adapter.d.ts"],
-      "adapters/memory": ["./dist/adapters/memory.d.ts"],
-      "providers/passkey": ["./dist/providers/passkey.d.ts"],
-      "providers/oauth2": ["./dist/providers/oauth2.d.ts"],
-      "providers/google": ["./dist/providers/google.d.ts"],
-      "providers/github": ["./dist/providers/github.d.ts"]
-    }
-  }
 }
