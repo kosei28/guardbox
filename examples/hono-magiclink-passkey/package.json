@@ -4,7 +4,7 @@
         "dev": "bun run --hot src/index.tsx"
     },
     "dependencies": {
-        "guardbox": "0.0.2",
+        "guardbox": "0.0.3",
         "hono": "^3.11.2",
         "resend": "^2.0.0"
     },

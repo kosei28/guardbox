@@ -1,7 +1,7 @@
 {
     "name": "guardbox",
-    "version": "0.0.2",
-    "author": "kosei28 <kosei28.jp@gmail.com> (https://github.com/kosei28)",
+    "version": "0.0.3",
+    "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
         "url": "https://github.com/kosei28/guardobx.git"
@@ -45,6 +45,10 @@
         "./providers/google": {
             "import": "./dist/providers/google.js",
             "types": "./dist/providers/google.d.ts"
+        },
+        "./providers/github": {
+            "import": "./dist/providers/github.js",
+            "types": "./dist/providers/github.d.ts"
         }
     },
     "description": "Easy and modern authentication library",
@@ -67,7 +71,8 @@
             "adapters/memory": ["./dist/adapters/memory.d.ts"],
             "providers/passkey": ["./dist/providers/passkey.d.ts"],
             "providers/oauth2": ["./dist/providers/oauth2.d.ts"],
-            "providers/google": ["./dist/providers/google.d.ts"]
+            "providers/google": ["./dist/providers/google.d.ts"],
+            "providers/github": ["./dist/providers/github.d.ts"]
         }
     }
 }

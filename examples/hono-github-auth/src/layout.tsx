@@ -1,0 +1,22 @@
+import type { Child, FC } from 'hono/jsx';
+
+export const Layout: FC<{ title: string }> = (props: {
+    children?: Child;
+    title: string;
+}) => {
+    return (
+        <html lang="en">
+            <head>
+                <title>{props.title}</title>
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1"
+                />
+            </head>
+            <body>
+                <h1>{props.title}</h1>
+                {props.children}
+            </body>
+        </html>
+    );
+};

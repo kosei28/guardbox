@@ -10,7 +10,7 @@ app.get('/', guardbox, async (c) => {
     if (session !== undefined) {
         const profile = getProfile(session.userId);
         return c.html(
-            <Layout title="Guardbox example - Hono with Google Auth">
+            <Layout title="Guardbox example - Hono with GitHub Auth">
                 <img
                     src={profile?.avatar_url}
                     alt={profile?.name}
@@ -24,8 +24,8 @@ app.get('/', guardbox, async (c) => {
         );
     }
     return c.html(
-        <Layout title="Guardbox example - Hono with Google Auth">
-            <a href="/auth/google/login">Login with Google</a>
+        <Layout title="Guardbox example - Hono with GitHub Auth">
+            <a href="/auth/github/login">Login with GitHub</a>
         </Layout>,
     );
 });

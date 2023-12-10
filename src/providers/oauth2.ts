@@ -1,5 +1,5 @@
 import type { Guardbox } from '..';
-import type { Session, User } from '../types';
+import type { User } from '../types';
 
 export type OAuth2Tokens = {
     access_token: string;
@@ -73,7 +73,10 @@ export class OAuth2Provider {
                 code,
             });
             const res = await fetch(this.options.tokenUrl, {
-                method: 'post',
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                },
                 body: params,
             });
             if (!res.ok) {

@@ -3,8 +3,7 @@ import {
     MemorySessionAdapter,
     MemoryUserAdapter,
 } from 'guardbox/adapters/memory';
-import { GoogleProvider } from 'guardbox/providers/google';
-import type { GoogleMetadata } from 'guardbox/providers/google';
+import { GitHubMetadata, GitHubProvider } from 'guardbox/providers/github';
 import type { MiddlewareHandler } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 
@@ -29,7 +28,7 @@ export const guardbox: MiddlewareHandler<{
     };
 }> = async (c, next) => {
     const auth = new Guardbox({
-        appName: 'hono-google-auth',
+        appName: 'hono-github-auth',
         adapter,
         cookies: {
             get: (key) => {
@@ -43,11 +42,11 @@ export const guardbox: MiddlewareHandler<{
             },
         },
         onUserCreate(user, account) {
-            const metadata = account?.metadata as GoogleMetadata;
+            const metadata = account?.metadata as GitHubMetadata;
             profiles.push({
                 id: user.id,
-                name: metadata.name,
-                avatar_url: metadata.picture,
+                name: metadata.login,
+                avatar_url: metadata.avatar_url,
             });
         },
     });
@@ -55,8 +54,8 @@ export const guardbox: MiddlewareHandler<{
     await next();
 };
 
-export const googleAuth = new GoogleProvider({
-    clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-    redirectUrl: `${process.env.ORIGIN}/auth/google/callback`,
+export const githubAuth = new GitHubProvider({
+    clientId: process.env.GITHUB_CLIENT_ID ?? '',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
+    redirectUrl: `${process.env.ORIGIN}/auth/github/callback`,
 });
