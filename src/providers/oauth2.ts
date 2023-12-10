@@ -62,7 +62,7 @@ export class OAuth2Provider {
         const savedState = await auth.getCookie(this.stateCookieKey(auth));
         await auth.deleteCookie(this.stateCookieKey(auth));
         if (savedState !== state) {
-            return undefined;
+            return;
         }
         try {
             const params = new URLSearchParams({
@@ -86,7 +86,7 @@ export class OAuth2Provider {
             const tokens: OAuth2Tokens = await res.json();
             return tokens;
         } catch (e) {
-            return undefined;
+            return;
         }
     }
 

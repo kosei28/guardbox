@@ -1,5 +1,4 @@
 import type {
-    Account,
     AccountWithUserId,
     Otp,
     OtpOptions,
@@ -10,7 +9,7 @@ import type {
     UserUpdateValue,
 } from './types';
 
-export abstract class GuardboxUserAdapter {
+export abstract class UserAdapter {
     public abstract createUser(value: UserCreateValue): Promise<User>;
 
     public abstract getUserById(userId: string): Promise<User | undefined>;
@@ -20,7 +19,7 @@ export abstract class GuardboxUserAdapter {
     public abstract updateUser(
         userId: string,
         value: UserUpdateValue,
-    ): Promise<User>;
+    ): Promise<User | undefined>;
 
     public abstract deleteUser(userId: string): void;
 
@@ -35,19 +34,19 @@ export abstract class GuardboxUserAdapter {
 
     public abstract getUserAccounts(
         userId: string,
-        provider: string,
+        provider?: string,
     ): Promise<AccountWithUserId[]>;
 
     public abstract updateAccountMetadata(
         provider: string,
         key: string,
         value: unknown,
-    ): Promise<AccountWithUserId>;
+    ): Promise<AccountWithUserId | undefined>;
 
     public abstract deleteAccount(userId: string, provider: string): void;
 }
 
-export abstract class GuardboxSessionAdapter {
+export abstract class SessionAdapter {
     public abstract createSession(
         userId: string,
         duration: SessionDuration,
@@ -60,7 +59,7 @@ export abstract class GuardboxSessionAdapter {
     public abstract deleteUserSession(userId: string): void;
 }
 
-export abstract class GuardboxOtpAdapter {
+export abstract class OtpAdapter {
     public abstract createOtp(
         options: OtpOptions,
         duration: number,

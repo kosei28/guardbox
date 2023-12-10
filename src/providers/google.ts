@@ -44,7 +44,7 @@ export class GoogleProvider extends OAuth2Provider {
                     };
                     return profile;
                 } catch (e) {
-                    return undefined;
+                    return;
                 }
             },
         });

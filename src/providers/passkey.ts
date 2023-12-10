@@ -39,7 +39,7 @@ export class PasskeyProvider {
     ): Promise<PublicKeyCredentialCreationOptionsJSON | undefined> {
         const session = await auth.getSession();
         if (session === undefined) {
-            return undefined;
+            return;
         }
         const userAccounts = await auth.getUserAccounts<PasskeyMetadata>(
             this.providerName,

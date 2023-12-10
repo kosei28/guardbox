@@ -71,7 +71,11 @@ export class Guardbox {
     ): Promise<User> {
         let user: User | undefined;
         let newUserCreated = false;
-        if (value.email !== undefined && value.emailVerified) {
+        if (
+            value.email !== undefined &&
+            value.email !== null &&
+            value.emailVerified
+        ) {
             user = await this.getUserByEmail(value.email);
         }
         if (user === undefined) {
@@ -102,7 +106,7 @@ export class Guardbox {
     public async updateUser(
         userId: string,
         value: UserUpdateValue,
-    ): Promise<User> {
+    ): Promise<User | undefined> {
         return await this.options.adapter.user.updateUser(userId, value);
     }
 
@@ -129,7 +133,7 @@ export class Guardbox {
 
     public async getUserAccounts<T = unknown>(
         userId: string,
-        provider: string,
+        provider?: string,
     ): Promise<AccountWithUserId<T>[]> {
         return (await this.options.adapter.user.getUserAccounts(
             userId,
@@ -141,12 +145,12 @@ export class Guardbox {
         provider: string,
         key: string,
         metadata: T,
-    ): Promise<AccountWithUserId<T>> {
+    ): Promise<AccountWithUserId<T> | undefined> {
         return (await this.options.adapter.user.updateAccountMetadata(
             provider,
             key,
             metadata,
-        )) as AccountWithUserId<T>;
+        )) as AccountWithUserId<T> | undefined;
     }
 
     public async deleteAccount(userId: string, provider: string) {
@@ -156,19 +160,19 @@ export class Guardbox {
     public async getSession(): Promise<Session | undefined> {
         const sessionId = await this.getCookie(this.sessionCookieKey);
         if (sessionId === undefined) {
-            return undefined;
+            return;
         }
         const session =
             await this.options.adapter.session.getSession(sessionId);
         if (session === undefined) {
             await this.setSession(null);
-            return undefined;
+            return;
         }
         if (session.activeExpiresAt < new Date()) {
             await this.deleteSession(session.id);
             if (session.idleExpiresAt < new Date()) {
                 await this.setSession(null);
-                return undefined;
+                return;
             }
             const newSession = await this.createSession(session.userId);
             await this.setSession(newSession);
@@ -232,11 +236,11 @@ export class Guardbox {
         }
         const otp = await this.options.adapter.otp.getOtp(options.id);
         if (otp === undefined || otp.type !== options.type) {
-            return undefined;
+            return;
         }
         await this.options.adapter.otp.deleteOtp(otp.id);
         if (otp.expiresAt < new Date()) {
-            return undefined;
+            return;
         }
         return otp;
     }

@@ -28,5 +28,17 @@
         "formatter": {
             "enabled": true
         }
-    }
+    },
+    "overrides": [
+        {
+            "include": ["src/adapters/drizzle"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noExplicitAny": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

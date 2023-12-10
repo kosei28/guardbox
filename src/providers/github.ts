@@ -107,7 +107,7 @@ export class GitHubProvider extends OAuth2Provider {
                     };
                     return profile;
                 } catch (e) {
-                    return undefined;
+                    return;
                 }
             },
         });

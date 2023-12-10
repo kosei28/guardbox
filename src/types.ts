@@ -1,15 +1,11 @@
-import type {
-    GuardboxOtpAdapter,
-    GuardboxSessionAdapter,
-    GuardboxUserAdapter,
-} from './adapter';
+import type { OtpAdapter, SessionAdapter, UserAdapter } from './adapter';
 
 export type GuardboxOptions = {
     appName: string;
     adapter: {
-        user: GuardboxUserAdapter;
-        session: GuardboxSessionAdapter;
-        otp?: GuardboxOtpAdapter;
+        user: UserAdapter;
+        session: SessionAdapter;
+        otp?: OtpAdapter;
     };
     cookies: {
         get: (key: string) => Promise<string | undefined> | string | undefined;
@@ -27,17 +23,17 @@ export type GuardboxOptions = {
 
 export type User = {
     id: string;
-    email?: string;
+    email: string | null;
     emailVerified: boolean;
 };
 
 export type UserCreateValue = {
-    email?: string;
+    email?: string | null;
     emailVerified: boolean;
 };
 
 export type UserUpdateValue = {
-    email?: string;
+    email?: string | null;
     emailVerified?: boolean;
 };
 
@@ -71,15 +67,15 @@ export type SessionDuration = {
 export type Otp = {
     id: string;
     type: string;
-    userId?: string;
-    state?: string;
+    userId: string | null;
+    state: string | null;
     expiresAt: Date;
 };
 
 export type OtpOptions = {
     type: string;
-    userId?: string;
-    state?: string;
+    userId?: string | null;
+    state?: string | null;
 };
 
 export type CookieOptions = {

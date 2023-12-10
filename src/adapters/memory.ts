@@ -1,10 +1,5 @@
-import {
-    GuardboxOtpAdapter,
-    GuardboxSessionAdapter,
-    GuardboxUserAdapter,
-} from '../adapter';
+import { OtpAdapter, SessionAdapter, UserAdapter } from '../adapter';
 import type {
-    Account,
     AccountWithUserId,
     Otp,
     OtpOptions,
@@ -15,7 +10,7 @@ import type {
     UserUpdateValue,
 } from '../types';
 
-export class MemoryUserAdapter extends GuardboxUserAdapter {
+export class MemoryUserAdapter implements UserAdapter {
     private users: User[] = [];
     private accounts: AccountWithUserId[] = [];
 
@@ -23,6 +18,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
         const user = {
             id: Math.random().toString(36).slice(2),
             ...value,
+            email: value.email ?? null,
         };
         this.users.push(user);
         return user;
@@ -39,10 +35,10 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     public async updateUser(
         userId: string,
         value: UserUpdateValue,
-    ): Promise<User> {
+    ): Promise<User | undefined> {
         const user = await this.getUserById(userId);
-        if (!user) {
-            throw new Error('User not found');
+        if (user === undefined) {
+            return;
         }
         if (value.email) {
             user.email = value.email;
@@ -60,10 +56,6 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     public async addAccount(
         value: AccountWithUserId,
     ): Promise<AccountWithUserId> {
-        const user = await this.getUserById(value.userId);
-        if (!user) {
-            throw new Error('User not found');
-        }
         this.accounts.push(value);
         return value;
     }
@@ -94,10 +86,10 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
         provider: string,
         key: string,
         metadata: unknown,
-    ): Promise<AccountWithUserId> {
+    ): Promise<AccountWithUserId | undefined> {
         const account = await this.getAccount(provider, key);
         if (account === undefined) {
-            throw new Error('Account not found');
+            return;
         }
         account.metadata = metadata;
         return account;
@@ -110,7 +102,7 @@ export class MemoryUserAdapter extends GuardboxUserAdapter {
     }
 }
 
-export class MemorySessionAdapter extends GuardboxSessionAdapter {
+export class MemorySessionAdapter implements SessionAdapter {
     private sessions: Session[] = [];
 
     public async createSession(
@@ -146,7 +138,7 @@ export class MemorySessionAdapter extends GuardboxSessionAdapter {
     }
 }
 
-export class MemoryOtpAdapter extends GuardboxOtpAdapter {
+export class MemoryOtpAdapter implements OtpAdapter {
     private otps: Otp[] = [];
 
     public async createOtp(
@@ -156,6 +148,8 @@ export class MemoryOtpAdapter extends GuardboxOtpAdapter {
         const otp = {
             id: Math.random().toString(36).slice(2),
             ...options,
+            userId: options.userId ?? null,
+            state: options.state ?? null,
             expiresAt: new Date(Date.now() + duration),
         };
         this.otps.push(otp);
