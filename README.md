@@ -19,7 +19,7 @@ bun add guardbox    # npm install guardbox
 
 ```ts
 import { Guardbox } from 'guardbox';
-import { MemoryOtpAdapter, MemorySessionAdapter } from 'guardbox/adapters/memory';
+import { MemorySessionAdapter, MemoryUserAdapter } from 'guardbox/adapters/memory';
 import { GoogleProvider } from 'guardbox/providers/google';
 
 const userAdapter = new MemoryUserAdapter();
