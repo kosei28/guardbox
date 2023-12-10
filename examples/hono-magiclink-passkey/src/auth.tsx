@@ -16,7 +16,11 @@ authApp.post('/magiclink/send', guardbox, async (c) => {
         state: email,
     });
     const verifyUrl = `${process.env.ORIGIN}/auth/magiclink/verify?token=${otp.id}`;
-    await sendLoginUrl(email, verifyUrl);
+    const { error } = await sendLoginUrl(email, verifyUrl);
+    if (error !== null) {
+        console.error(error);
+        return c.redirect('/auth/error');
+    }
     return c.html(
         <Layout title="Login link has been sent">
             <p>

@@ -4,6 +4,7 @@
 #.env
 DOMAIN=localhost
 ORIGIN=http://localhost:3000
+EMAIL_FROM=
 RESEND_API_KEY=
 ```
 
