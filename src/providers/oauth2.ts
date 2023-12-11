@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import type { Guardbox } from '../guardbox';
 import type { User } from '../types';
 
@@ -38,7 +39,7 @@ export class OAuth2Provider {
     }
 
     public getSignInUrl(auth: Guardbox): string {
-        const state = Math.random().toString(36).slice(2);
+        const state = nanoid();
         auth.setCookie(this.stateCookieKey(auth), state);
         const params = new URLSearchParams({
             response_type: 'code',
