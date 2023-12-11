@@ -11,7 +11,7 @@ import type {
     PublicKeyCredentialRequestOptionsJSON,
     RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
-import type { Guardbox } from '..';
+import type { Guardbox } from '../guardbox';
 import { base64urlToBytes, bytesToBase64url } from '../utils';
 
 export type PasskeyMetadata = {

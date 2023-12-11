@@ -1,38 +1,7 @@
-export {
-	DrizzlePgUserAdapter,
-	DrizzlePgSessionAdapter,
-	DrizzlePgOtpAdapter,
-} from './pg';
+export * from './pg';
+export * from './mysql';
+export * from './sqlite';
 
-export {
-	DrizzleMySqlUserAdapter,
-	DrizzleMySqlSessionAdapter,
-	DrizzleMySqlOtpAdapter,
-} from './mysql';
-
-export {
-	DrizzleSQLiteUserAdapter,
-	DrizzleSQLiteSessionAdapter,
-	DrizzleSQLiteOtpAdapter,
-} from './sqlite';
-
-export type {
-	PgUserTable,
-	PgAccountTable,
-	PgSessionTable,
-	PgOtpTable,
-} from './pg/types';
-
-export type {
-	MySqlUserTable,
-	MySqlAccountTable,
-	MySqlSessionTable,
-	MySqlOtpTable,
-} from './mysql/types';
-
-export type {
-	SQLiteUserTable,
-	SQLiteAccountTable,
-	SQLiteSessionTable,
-	SQLiteOtpTable,
-} from './sqlite/types';
+export * from './pg/types';
+export * from './mysql/types';
+export * from './sqlite/types';

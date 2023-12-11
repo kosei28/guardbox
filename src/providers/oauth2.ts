@@ -1,4 +1,4 @@
-import type { Guardbox } from '..';
+import type { Guardbox } from '../guardbox';
 import type { User } from '../types';
 
 export type OAuth2Tokens = {

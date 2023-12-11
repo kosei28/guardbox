@@ -26,8 +26,12 @@ const addJsExtension: Plugin = {
     },
 };
 
+const entryPoints = [...new Glob('./src/**/*.ts').scanSync('.')].filter(
+    (path) => !path.endsWith('.test.ts'),
+);
+
 build({
-    entryPoints: [...new Glob('./src/**/*.ts').scanSync('.')],
+    entryPoints,
     outbase: './src',
     outdir: './dist',
     platform: 'node',

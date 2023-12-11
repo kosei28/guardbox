@@ -1,6 +1,6 @@
 {
     "name": "guardbox",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
@@ -22,14 +22,6 @@
         ".": {
             "import": "./dist/index.js",
             "types": "./dist/index.d.ts"
-        },
-        "./types": {
-            "import": "./dist/types.js",
-            "types": "./dist/types.d.ts"
-        },
-        "./adapter": {
-            "import": "./dist/adapter.js",
-            "types": "./dist/adapter.d.ts"
         },
         "./adapters/memory": {
             "import": "./dist/adapters/memory.js",
@@ -64,15 +56,13 @@
         "lint": "bun x @biomejs/biome lint .",
         "format": "bun x @biomejs/biome format . --write",
         "check": "bun x @biomejs/biome check . --apply",
-        "build": "rimraf dist && bun tsc && bun build.ts",
+        "build": "rimraf dist && bun tsc -p tsconfig.build.json && bun build.ts",
         "prepare": "bun run build"
     },
     "type": "module",
     "types": "dist/index.d.ts",
     "typesVersions": {
         "*": {
-            "types": ["./dist/types.d.ts"],
-            "adapter": ["./dist/adapter.d.ts"],
             "adapters/memory": ["./dist/adapters/memory.d.ts"],
             "adapters/drizzle": ["./dist/adapters/drizzle/index.d.ts"],
             "providers/passkey": ["./dist/providers/passkey.d.ts"],
