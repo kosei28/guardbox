@@ -56,7 +56,7 @@ export abstract class SessionAdapter {
 
     public abstract deleteSession(sessionId: string): void;
 
-    public abstract deleteUserSession(userId: string): void;
+    public abstract deleteUserSessions(userId: string): void;
 }
 
 export abstract class OtpAdapter {

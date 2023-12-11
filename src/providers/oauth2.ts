@@ -126,6 +126,9 @@ export class OAuth2Provider {
                 },
             );
         }
+        if (user === undefined) {
+            return false;
+        }
         const session = await auth.createSession(user.id);
         await auth.setSession(session);
         return true;

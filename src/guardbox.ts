@@ -65,18 +65,22 @@ export class Guardbox {
         });
     }
 
-    public async createUser(
+    public async createUser<T = unknown>(
         value: UserCreateValue,
-        account?: Account,
-    ): Promise<User> {
+        account?: Account<T>,
+    ): Promise<User | undefined> {
         let user: User | undefined;
         let newUserCreated = false;
-        if (
-            value.email !== undefined &&
-            value.email !== null &&
-            value.emailVerified
-        ) {
+        if (value.email !== undefined && value.email !== null) {
             user = await this.getUserByEmail(value.email);
+        }
+        if (
+            user !== undefined &&
+            (!user.emailVerified ||
+                !value.emailVerified ||
+                account === undefined)
+        ) {
+            return;
         }
         if (user === undefined) {
             user = await this.options.adapter.user.createUser(value);
@@ -205,8 +209,8 @@ export class Guardbox {
         await this.options.adapter.session.deleteSession(sessionId);
     }
 
-    public async deleteUserSession(userId: string) {
-        await this.options.adapter.session.deleteUserSession(userId);
+    public async deleteUserSessions(userId: string) {
+        await this.options.adapter.session.deleteUserSessions(userId);
     }
 
     public async signOut() {

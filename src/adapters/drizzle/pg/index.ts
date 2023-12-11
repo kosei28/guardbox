@@ -183,7 +183,7 @@ export class DrizzlePgSessionAdapter implements SessionAdapter {
 			.where(eq(this.tables.session.id, sessionId));
 	}
 
-	public async deleteUserSession(userId: string): Promise<void> {
+	public async deleteUserSessions(userId: string): Promise<void> {
 		await this.db
 			.delete(this.tables.session)
 			.where(eq(this.tables.session.userId, userId));

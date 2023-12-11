@@ -1,6 +1,6 @@
 {
     "name": "guardbox",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
@@ -57,7 +57,7 @@
         "format": "bun x @biomejs/biome format . --write",
         "check": "bun x @biomejs/biome check . --apply",
         "build": "rimraf dist && bun tsc -p tsconfig.build.json && bun build.ts",
-        "prepare": "bun run build"
+        "prepare": "bun test && bun run build"
     },
     "type": "module",
     "types": "dist/index.d.ts",

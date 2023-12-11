@@ -76,9 +76,7 @@ export class MemoryUserAdapter implements UserAdapter {
         return this.accounts.filter(
             (account) =>
                 account.userId === userId &&
-                (account.provider !== undefined
-                    ? account.provider === provider
-                    : true),
+                (provider !== undefined ? account.provider === provider : true),
         );
     }
 
@@ -131,7 +129,7 @@ export class MemorySessionAdapter implements SessionAdapter {
         );
     }
 
-    public deleteUserSession(userId: string): void {
+    public deleteUserSessions(userId: string): void {
         this.sessions = this.sessions.filter(
             (session) => session.userId !== userId,
         );
