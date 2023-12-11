@@ -43,10 +43,10 @@ const auth = new Guardbox({
             return getCookie(req, key);
         },
         set: (key, value, options) => {
-            setCookie(req, key, value, options);
+            setCookie(res, key, value, options);
         },
         delete: (key, options) => {
-            deleteCookie(req, key, options);
+            deleteCookie(res, key, options);
         },
     },
 });
