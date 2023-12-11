@@ -1,6 +1,6 @@
 {
     "name": "guardbox",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
@@ -36,8 +36,8 @@
             "types": "./dist/adapters/memory.d.ts"
         },
         "./adapters/drizzle": {
-            "import": "./dist/adapters/drizzle.js",
-            "types": "./dist/adapters/drizzle.d.ts"
+            "import": "./dist/adapters/drizzle/index.js",
+            "types": "./dist/adapters/drizzle/index.d.ts"
         },
         "./providers/passkey": {
             "import": "./dist/providers/passkey.js",
@@ -74,7 +74,7 @@
             "types": ["./dist/types.d.ts"],
             "adapter": ["./dist/adapter.d.ts"],
             "adapters/memory": ["./dist/adapters/memory.d.ts"],
-            "adapters/drizzle": ["./dist/adapters/drizzle.d.ts"],
+            "adapters/drizzle": ["./dist/adapters/drizzle/index.d.ts"],
             "providers/passkey": ["./dist/providers/passkey.d.ts"],
             "providers/oauth2": ["./dist/providers/oauth2.d.ts"],
             "providers/google": ["./dist/providers/google.d.ts"],
