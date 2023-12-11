@@ -17,7 +17,7 @@ export const userTable = sqliteTable('users', {
 export const accountTable = sqliteTable(
     'accounts',
     {
-        id: text('id').primaryKey(),
+        id: integer('id').primaryKey({ autoIncrement: true }),
         userId: text('user_id').notNull(),
         provider: text('provider').notNull(),
         key: text('key').notNull(),
@@ -27,6 +27,20 @@ export const accountTable = sqliteTable(
         unq: unique().on(t.provider, t.key),
     }),
 );
+
+// You can also use the following schema definition:
+// export const accountTable = sqliteTable(
+//     'accounts',
+//     {
+//         userId: text('user_id').notNull(),
+//         provider: text('provider').notNull(),
+//         key: text('key').notNull(),
+//         metadata: text('metadata', { mode: 'json' }),
+//     },
+//     (t) => ({
+//         pk: primaryKey({ columns: [t.provider, t.key] }),
+//     }),
+// );
 
 export const sessionTable = sqliteTable('sessions', {
     id: text('id').primaryKey(),

@@ -1,3 +1,4 @@
+import { User } from 'guardbox';
 import { Hono } from 'hono';
 import { sendLoginUrl } from './email';
 import { guardbox, passkeyAuth } from './guardbox';
@@ -42,10 +43,10 @@ authApp.get('/magiclink/verify', guardbox, async (c) => {
         if (result !== undefined) {
             let user = await c.var.auth.getUserByEmail(result.state as string);
             if (user === undefined) {
-                user = await c.var.auth.createUser({
+                user = (await c.var.auth.createUser({
                     email: result.state,
                     emailVerified: true,
-                });
+                })) as User;
             }
             const session = await c.var.auth.createSession(user.id);
             await c.var.auth.setSession(session);
