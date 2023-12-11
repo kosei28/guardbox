@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import type {
     Account,
     AccountWithUserId,
@@ -83,7 +84,12 @@ export class Guardbox {
             return;
         }
         if (user === undefined) {
-            user = await this.options.adapter.user.createUser(value);
+            user = {
+                id: nanoid(),
+                ...value,
+                email: value.email ?? null,
+            };
+            await this.options.adapter.user.createUser(user);
             newUserCreated = true;
         }
         let newAccount;
@@ -110,8 +116,8 @@ export class Guardbox {
     public async updateUser(
         userId: string,
         value: UserUpdateValue,
-    ): Promise<User | undefined> {
-        return await this.options.adapter.user.updateUser(userId, value);
+    ): Promise<void> {
+        await this.options.adapter.user.updateUser(userId, value);
     }
 
     public async deleteUser(userId: string) {
@@ -121,9 +127,8 @@ export class Guardbox {
     public async addAccount<T = unknown>(
         value: AccountWithUserId<T>,
     ): Promise<AccountWithUserId<T>> {
-        return (await this.options.adapter.user.addAccount(
-            value,
-        )) as AccountWithUserId<T>;
+        await this.options.adapter.user.addAccount(value);
+        return value;
     }
 
     public async getAccount<T = unknown>(
@@ -199,10 +204,18 @@ export class Guardbox {
     }
 
     public async createSession(userId: string): Promise<Session> {
-        return await this.options.adapter.session.createSession(
+        const session = {
+            id: nanoid(),
             userId,
-            this.sessionDuration,
-        );
+            activeExpiresAt: new Date(Date.now() + this.sessionDuration.active),
+            idleExpiresAt: new Date(
+                Date.now() +
+                    this.sessionDuration.active +
+                    this.sessionDuration.idle,
+            ),
+        };
+        await this.options.adapter.session.createSession(session);
+        return session;
     }
 
     public async deleteSession(sessionId: string) {
@@ -228,7 +241,15 @@ export class Guardbox {
         if (this.options.adapter.otp === undefined) {
             throw new Error('OTP adapter not found');
         }
-        return await this.options.adapter.otp.createOtp(options, duration);
+        const otp = {
+            id: nanoid(),
+            ...options,
+            userId: options.userId ?? null,
+            state: options.state ?? null,
+            expiresAt: new Date(Date.now() + duration),
+        };
+        await this.options.adapter.otp.createOtp(otp);
+        return otp;
     }
 
     public async verifyOtp(options: {

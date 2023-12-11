@@ -4,11 +4,8 @@ import { OtpAdapter, SessionAdapter, UserAdapter } from '../../../adapter';
 import type {
 	AccountWithUserId,
 	Otp,
-	OtpOptions,
 	Session,
-	SessionDuration,
 	User,
-	UserCreateValue,
 	UserUpdateValue,
 } from '../../../types';
 import type {
@@ -24,16 +21,8 @@ export class DrizzleSQLiteUserAdapter implements UserAdapter {
 		private tables: { user: SQLiteUserTable; account: SQLiteAccountTable },
 	) {}
 
-	public async createUser(value: UserCreateValue): Promise<User> {
-		const [user] = await this.db
-			.insert(this.tables.user)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...value,
-				email: value.email,
-			})
-			.returning();
-		return user;
+	public async createUser(value: User): Promise<void> {
+		await this.db.insert(this.tables.user).values(value);
 	}
 
 	public async getUserById(userId: string): Promise<User | undefined> {
@@ -55,13 +44,11 @@ export class DrizzleSQLiteUserAdapter implements UserAdapter {
 	public async updateUser(
 		userId: string,
 		value: UserUpdateValue,
-	): Promise<User | undefined> {
-		const [user] = await this.db
+	): Promise<void> {
+		await this.db
 			.update(this.tables.user)
 			.set(value)
-			.where(eq(this.tables.user.id, userId))
-			.returning();
-		return user;
+			.where(eq(this.tables.user.id, userId));
 	}
 
 	public async deleteUser(userId: string): Promise<void> {
@@ -70,17 +57,8 @@ export class DrizzleSQLiteUserAdapter implements UserAdapter {
 			.where(eq(this.tables.user.id, userId));
 	}
 
-	public async addAccount(
-		value: AccountWithUserId,
-	): Promise<AccountWithUserId> {
-		const [account] = await this.db
-			.insert(this.tables.account)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...value,
-			})
-			.returning();
-		return account;
+	public async addAccount(value: AccountWithUserId): Promise<void> {
+		await this.db.insert(this.tables.account).values(value);
 	}
 
 	public async getAccount(
@@ -121,8 +99,8 @@ export class DrizzleSQLiteUserAdapter implements UserAdapter {
 		provider: string,
 		key: string,
 		metadata: unknown,
-	): Promise<AccountWithUserId | undefined> {
-		const [account] = await this.db
+	): Promise<void> {
+		await this.db
 			.update(this.tables.account)
 			.set({ metadata })
 			.where(
@@ -130,9 +108,7 @@ export class DrizzleSQLiteUserAdapter implements UserAdapter {
 					eq(this.tables.account.provider, provider),
 					eq(this.tables.account.key, key),
 				),
-			)
-			.returning();
-		return account;
+			);
 	}
 
 	public async deleteAccount(provider: string, key: string): Promise<void> {
@@ -153,20 +129,8 @@ export class DrizzleSQLiteSessionAdapter implements SessionAdapter {
 		private tables: { session: SQLiteSessionTable },
 	) {}
 
-	public async createSession(
-		userId: string,
-		duration: SessionDuration,
-	): Promise<Session> {
-		const [session] = await this.db
-			.insert(this.tables.session)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				userId,
-				activeExpiresAt: new Date(Date.now() + duration.active),
-				idleExpiresAt: new Date(Date.now() + duration.active + duration.idle),
-			})
-			.returning();
-		return session;
+	public async createSession(value: Session): Promise<void> {
+		await this.db.insert(this.tables.session).values(value);
 	}
 
 	public async getSession(sessionId: string): Promise<Session | undefined> {
@@ -196,16 +160,8 @@ export class DrizzleSQLiteOtpAdapter implements OtpAdapter {
 		private tables: { otp: SQLiteOtpTable },
 	) {}
 
-	public async createOtp(options: OtpOptions, duration: number): Promise<Otp> {
-		const [otp] = await this.db
-			.insert(this.tables.otp)
-			.values({
-				id: Math.random().toString(36).slice(2),
-				...options,
-				expiresAt: new Date(Date.now() + duration),
-			})
-			.returning();
-		return otp;
+	public async createOtp(value: Otp): Promise<void> {
+		await this.db.insert(this.tables.otp).values(value);
 	}
 
 	public async getOtp(otpId: string): Promise<Otp | undefined> {

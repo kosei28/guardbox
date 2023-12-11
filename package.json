@@ -1,6 +1,6 @@
 {
     "name": "guardbox",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
@@ -13,6 +13,7 @@
         "bun-types": "latest",
         "drizzle-orm": "^0.29.1",
         "esbuild": "^0.19.8",
+        "nanoid": "^5.0.4",
         "rimraf": "^5.0.5"
     },
     "peerDependencies": {
@@ -57,7 +58,7 @@
         "format": "bun x @biomejs/biome format . --write",
         "check": "bun x @biomejs/biome check . --apply",
         "build": "rimraf dist && bun tsc -p tsconfig.build.json && bun build.ts",
-        "prepare": "bun test && bun run build"
+        "prepublishOnly": "bun test && bun run build"
     },
     "type": "module",
     "types": "dist/index.d.ts",

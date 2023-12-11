@@ -1,31 +1,23 @@
 import type {
     AccountWithUserId,
     Otp,
-    OtpOptions,
     Session,
-    SessionDuration,
     User,
-    UserCreateValue,
     UserUpdateValue,
 } from './types';
 
 export abstract class UserAdapter {
-    public abstract createUser(value: UserCreateValue): Promise<User>;
+    public abstract createUser(value: User): void;
 
     public abstract getUserById(userId: string): Promise<User | undefined>;
 
     public abstract getUserByEmail(email: string): Promise<User | undefined>;
 
-    public abstract updateUser(
-        userId: string,
-        value: UserUpdateValue,
-    ): Promise<User | undefined>;
+    public abstract updateUser(userId: string, value: UserUpdateValue): void;
 
     public abstract deleteUser(userId: string): void;
 
-    public abstract addAccount(
-        value: AccountWithUserId,
-    ): Promise<AccountWithUserId>;
+    public abstract addAccount(value: AccountWithUserId): void;
 
     public abstract getAccount(
         provider: string,
@@ -41,16 +33,13 @@ export abstract class UserAdapter {
         provider: string,
         key: string,
         value: unknown,
-    ): Promise<AccountWithUserId | undefined>;
+    ): void;
 
     public abstract deleteAccount(userId: string, provider: string): void;
 }
 
 export abstract class SessionAdapter {
-    public abstract createSession(
-        userId: string,
-        duration: SessionDuration,
-    ): Promise<Session>;
+    public abstract createSession(value: Session): void;
 
     public abstract getSession(sessionId: string): Promise<Session | undefined>;
 
@@ -60,10 +49,7 @@ export abstract class SessionAdapter {
 }
 
 export abstract class OtpAdapter {
-    public abstract createOtp(
-        options: OtpOptions,
-        duration: number,
-    ): Promise<Otp>;
+    public abstract createOtp(value: Otp): void;
 
     public abstract getOtp(otpId: string): Promise<Otp | undefined>;
 

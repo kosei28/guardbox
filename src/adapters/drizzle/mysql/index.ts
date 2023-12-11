@@ -4,11 +4,8 @@ import { OtpAdapter, SessionAdapter, UserAdapter } from '../../../adapter';
 import type {
 	AccountWithUserId,
 	Otp,
-	OtpOptions,
 	Session,
-	SessionDuration,
 	User,
-	UserCreateValue,
 	UserUpdateValue,
 } from '../../../types';
 import type {
@@ -24,14 +21,8 @@ export class DrizzleMySqlUserAdapter implements UserAdapter {
 		private tables: { user: MySqlUserTable; account: MySqlAccountTable },
 	) {}
 
-	public async createUser(value: UserCreateValue): Promise<User> {
-		const user = {
-			id: Math.random().toString(36).slice(2),
-			...value,
-			email: value.email ?? null,
-		};
-		await this.db.insert(this.tables.user).values(user);
-		return user;
+	public async createUser(value: User): Promise<void> {
+		await this.db.insert(this.tables.user).values(value);
 	}
 
 	public async getUserById(userId: string): Promise<User | undefined> {
@@ -53,19 +44,11 @@ export class DrizzleMySqlUserAdapter implements UserAdapter {
 	public async updateUser(
 		userId: string,
 		value: UserUpdateValue,
-	): Promise<User | undefined> {
-		const [user] = await this.db
-			.select()
-			.from(this.tables.user)
-			.where(eq(this.tables.user.id, userId));
-		if (user === undefined) {
-			return;
-		}
+	): Promise<void> {
 		await this.db
 			.update(this.tables.user)
 			.set(value)
-			.where(eq(this.tables.user.id, user.id));
-		return user;
+			.where(eq(this.tables.user.id, userId));
 	}
 
 	public async deleteUser(userId: string): Promise<void> {
@@ -74,15 +57,8 @@ export class DrizzleMySqlUserAdapter implements UserAdapter {
 			.where(eq(this.tables.user.id, userId));
 	}
 
-	public async addAccount(
-		value: AccountWithUserId,
-	): Promise<AccountWithUserId> {
-		const account = {
-			id: Math.random().toString(36).slice(2),
-			...value,
-		};
-		await this.db.insert(this.tables.account).values(account);
-		return account;
+	public async addAccount(value: AccountWithUserId): Promise<void> {
+		await this.db.insert(this.tables.account).values(value);
 	}
 
 	public async getAccount(
@@ -123,24 +99,16 @@ export class DrizzleMySqlUserAdapter implements UserAdapter {
 		provider: string,
 		key: string,
 		metadata: unknown,
-	): Promise<AccountWithUserId | undefined> {
-		const [account] = await this.db
-			.select()
-			.from(this.tables.account)
+	): Promise<void> {
+		await this.db
+			.update(this.tables.account)
+			.set({ metadata })
 			.where(
 				and(
 					eq(this.tables.account.provider, provider),
 					eq(this.tables.account.key, key),
 				),
 			);
-		if (account === undefined) {
-			return;
-		}
-		await this.db
-			.update(this.tables.account)
-			.set({ metadata })
-			.where(eq(this.tables.account.id, account.id));
-		return account;
 	}
 
 	public async deleteAccount(provider: string, key: string): Promise<void> {
@@ -161,18 +129,8 @@ export class DrizzleMySqlSessionAdapter implements SessionAdapter {
 		private tables: { session: MySqlSessionTable },
 	) {}
 
-	public async createSession(
-		userId: string,
-		duration: SessionDuration,
-	): Promise<Session> {
-		const session = {
-			id: Math.random().toString(36).slice(2),
-			userId,
-			activeExpiresAt: new Date(Date.now() + duration.active),
-			idleExpiresAt: new Date(Date.now() + duration.active + duration.idle),
-		};
-		await this.db.insert(this.tables.session).values(session);
-		return session;
+	public async createSession(value: Session): Promise<void> {
+		await this.db.insert(this.tables.session).values(value);
 	}
 
 	public async getSession(sessionId: string): Promise<Session | undefined> {
@@ -202,16 +160,8 @@ export class DrizzleMySqlOtpAdapter implements OtpAdapter {
 		private tables: { otp: MySqlOtpTable },
 	) {}
 
-	public async createOtp(options: OtpOptions, duration: number): Promise<Otp> {
-		const otp = {
-			id: Math.random().toString(36).slice(2),
-			...options,
-			userId: options.userId ?? null,
-			state: options.state ?? null,
-			expiresAt: new Date(Date.now() + duration),
-		};
-		await this.db.insert(this.tables.otp).values(otp);
-		return otp;
+	public async createOtp(value: Otp): Promise<void> {
+		await this.db.insert(this.tables.otp).values(value);
 	}
 
 	public async getOtp(otpId: string): Promise<Otp | undefined> {

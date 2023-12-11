@@ -27,7 +27,6 @@ export type PgAccountTable = PgTableWithColumns<{
 	name: any;
 	schema: any;
 	columns: {
-		id: Column<true, string>;
 		userId: Column<true, string>;
 		provider: Column<true, string>;
 		key: Column<true, string>;

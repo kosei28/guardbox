@@ -2,11 +2,8 @@ import { OtpAdapter, SessionAdapter, UserAdapter } from '../adapter';
 import type {
     AccountWithUserId,
     Otp,
-    OtpOptions,
     Session,
-    SessionDuration,
     User,
-    UserCreateValue,
     UserUpdateValue,
 } from '../types';
 
@@ -14,14 +11,8 @@ export class MemoryUserAdapter implements UserAdapter {
     private users: User[] = [];
     private accounts: AccountWithUserId[] = [];
 
-    public async createUser(value: UserCreateValue): Promise<User> {
-        const user = {
-            id: Math.random().toString(36).slice(2),
-            ...value,
-            email: value.email ?? null,
-        };
-        this.users.push(user);
-        return user;
+    public async createUser(value: User): Promise<void> {
+        this.users.push(value);
     }
 
     public async getUserById(userId: string): Promise<User | undefined> {
@@ -35,7 +26,7 @@ export class MemoryUserAdapter implements UserAdapter {
     public async updateUser(
         userId: string,
         value: UserUpdateValue,
-    ): Promise<User | undefined> {
+    ): Promise<void> {
         const user = await this.getUserById(userId);
         if (user === undefined) {
             return;
@@ -46,18 +37,14 @@ export class MemoryUserAdapter implements UserAdapter {
         if (value.emailVerified) {
             user.emailVerified = value.emailVerified;
         }
-        return user;
     }
 
     public deleteUser(userId: string): void {
         this.users = this.users.filter((user) => user.id !== userId);
     }
 
-    public async addAccount(
-        value: AccountWithUserId,
-    ): Promise<AccountWithUserId> {
+    public async addAccount(value: AccountWithUserId): Promise<void> {
         this.accounts.push(value);
-        return value;
     }
 
     public async getAccount(
@@ -84,13 +71,12 @@ export class MemoryUserAdapter implements UserAdapter {
         provider: string,
         key: string,
         metadata: unknown,
-    ): Promise<AccountWithUserId | undefined> {
+    ): Promise<void> {
         const account = await this.getAccount(provider, key);
         if (account === undefined) {
             return;
         }
         account.metadata = metadata;
-        return account;
     }
 
     public deleteAccount(provider: string, key: string): void {
@@ -103,20 +89,8 @@ export class MemoryUserAdapter implements UserAdapter {
 export class MemorySessionAdapter implements SessionAdapter {
     private sessions: Session[] = [];
 
-    public async createSession(
-        userId: string,
-        duration: SessionDuration,
-    ): Promise<Session> {
-        const session = {
-            id: Math.random().toString(36).slice(2),
-            userId,
-            activeExpiresAt: new Date(Date.now() + duration.active),
-            idleExpiresAt: new Date(
-                Date.now() + duration.active + duration.idle,
-            ),
-        };
-        this.sessions.push(session);
-        return session;
+    public async createSession(value: Session): Promise<void> {
+        this.sessions.push(value);
     }
 
     public async getSession(sessionId: string): Promise<Session | undefined> {
@@ -139,19 +113,8 @@ export class MemorySessionAdapter implements SessionAdapter {
 export class MemoryOtpAdapter implements OtpAdapter {
     private otps: Otp[] = [];
 
-    public async createOtp(
-        options: OtpOptions,
-        duration: number,
-    ): Promise<Otp> {
-        const otp = {
-            id: Math.random().toString(36).slice(2),
-            ...options,
-            userId: options.userId ?? null,
-            state: options.state ?? null,
-            expiresAt: new Date(Date.now() + duration),
-        };
-        this.otps.push(otp);
-        return otp;
+    public async createOtp(value: Otp): Promise<void> {
+        this.otps.push(value);
     }
 
     public async getOtp(otpId: string): Promise<Otp | undefined> {
