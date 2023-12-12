@@ -53,7 +53,15 @@
     },
     "description": "Easy and modern authentication library",
     "files": ["dist"],
-    "keywords": ["guardbox", "auth", "authentication", "login", "session"],
+    "keywords": [
+        "guardbox",
+        "auth",
+        "authentication",
+        "login",
+        "session",
+        "oauth2",
+        "passkey"
+    ],
     "license": "MIT",
     "scripts": {
         "lint": "bun x @biomejs/biome lint .",
