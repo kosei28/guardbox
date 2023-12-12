@@ -37,5 +37,6 @@ build({
     platform: 'node',
     format: 'esm',
     bundle: true,
+    external: ['nanoid'],
     plugins: [addJsExtension],
 });

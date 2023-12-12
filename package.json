@@ -1,19 +1,21 @@
 {
     "name": "guardbox",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "author": "kosei28 <contact@kosei28.com> (https://github.com/kosei28)",
     "repository": {
         "type": "git",
         "url": "https://github.com/kosei28/guardobx.git"
     },
     "main": "dist/index.js",
+    "dependencies": {
+        "nanoid": "^5.0.4"
+    },
     "devDependencies": {
         "@biomejs/biome": "1.4.1",
         "@simplewebauthn/server": "^8.3.5",
         "bun-types": "latest",
         "drizzle-orm": "^0.29.1",
         "esbuild": "^0.19.8",
-        "nanoid": "^5.0.4",
         "rimraf": "^5.0.5"
     },
     "peerDependencies": {
